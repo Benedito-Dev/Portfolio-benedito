@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import profileImage from './assets/profile.jpeg';
+import profileImage from './assets/Profile.jpg';
 import MatrixRain from './components/MatrixRain';
 
 function App() {
