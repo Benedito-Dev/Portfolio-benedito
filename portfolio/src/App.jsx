@@ -67,6 +67,10 @@ function App() {
       </section>
 
       {/* About Section */}
+      <div className="section-divider">
+        <div className="divider-line"></div>
+        <div className="divider-icon">👨‍💻</div>
+      </div>
       <section className="about" id="about">
         <div className="container">
           <h2>Sobre Mim</h2>
@@ -86,6 +90,10 @@ function App() {
       </section>
 
       {/* Skills Section */}
+      <div className="section-divider">
+        <div className="divider-line"></div>
+        <div className="divider-icon">⚙️</div>
+      </div>
       <section className="skills" id="skills">
         <div className="container">
           <h2>Stack Técnica</h2>
@@ -127,6 +135,10 @@ function App() {
       </section>
 
       {/* Projects Section */}
+      <div className="section-divider">
+        <div className="divider-line"></div>
+        <div className="divider-icon">💼</div>
+      </div>
       <section className="projects" id="projects">
         <div className="container">
           <h2>Projetos</h2>
@@ -155,6 +167,10 @@ function App() {
       </section>
 
       {/* Philosophy Section */}
+      <div className="section-divider">
+        <div className="divider-line"></div>
+        <div className="divider-icon">💡</div>
+      </div>
       <section className="philosophy" id="philosophy">
         <div className="container">
           <h2>Filosofia de Desenvolvimento</h2>
@@ -176,6 +192,10 @@ function App() {
       </section>
 
       {/* Contact Section */}
+      <div className="section-divider">
+        <div className="divider-line"></div>
+        <div className="divider-icon">💬</div>
+      </div>
       <section className="contact" id="contact">
         <div className="container">
           <h2>Vamos Conversar</h2>
