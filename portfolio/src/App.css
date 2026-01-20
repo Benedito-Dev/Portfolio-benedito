@@ -122,6 +122,7 @@ body::before {
     radial-gradient(ellipse at center, rgba(0, 212, 170, 0.1) 0%, transparent 70%);
   position: relative;
   padding-top: 80px;
+  overflow: hidden;
 }
 
 .hero::before {
@@ -136,6 +137,13 @@ body::before {
     linear-gradient(-45deg, transparent 49%, rgba(0, 212, 170, 0.02) 50%, transparent 51%);
   background-size: 60px 60px;
   pointer-events: none;
+}
+
+/* Matrix Rain Effect - Removed old CSS animation */
+
+.hero .container {
+  position: relative;
+  z-index: 2;
 }
 
 .hero-title {
@@ -562,6 +570,18 @@ h2 {
   
   .hero .container {
     padding: 0 1.5rem;
+  }
+  
+  .stars-animation::before,
+  .stars-animation::after {
+    animation-duration: 10s;
+  }
+  
+  .matrix-rain::before,
+  .matrix-rain::after {
+    font-size: 10px;
+    line-height: 14px;
+    animation-duration: 15s;
   }
 }
 

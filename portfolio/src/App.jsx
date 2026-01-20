@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import profileImage from './assets/profile.jpeg';
+import MatrixRain from './components/MatrixRain';
 
 function App() {
   const skills = {
@@ -51,6 +52,7 @@ function App() {
 
       {/* Hero Section */}
       <section className="hero">
+        <MatrixRain />
         <div className="container">
           <h1 className="hero-title">Transformando lógica em soluções reais.</h1>
           <p className="hero-subtitle">
