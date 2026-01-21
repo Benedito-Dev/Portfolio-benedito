@@ -1,0 +1,37 @@
+/* About Section */
+.about {
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.03) 0%, transparent 50%, rgba(0, 100, 200, 0.02) 100%);
+}
+
+.about-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  text-align: left;
+}
+
+.profile-image {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #00d4aa;
+  box-shadow: 0 0 30px rgba(0, 212, 170, 0.3);
+  flex-shrink: 0;
+}
+
+.about-text {
+  flex: 1;
+}
+
+.about-text p {
+  font-size: 1.125rem;
+  color: #c0c0c0;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}

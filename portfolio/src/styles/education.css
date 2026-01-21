@@ -1,0 +1,253 @@
+/* Education Section */
+.education {
+  background: linear-gradient(135deg, rgba(0, 100, 200, 0.02) 0%, transparent 50%, rgba(100, 0, 200, 0.03) 100%);
+}
+
+.education-timeline {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.education-timeline::before {
+  content: '';
+  position: absolute;
+  left: 30px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, #ffa500, #00d4aa);
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 3rem;
+  padding-left: 80px;
+}
+
+.timeline-item.featured {
+  transform: scale(1.02);
+}
+
+.timeline-marker {
+  position: absolute;
+  left: 18px;
+  top: 20px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 4px solid #1a1a1a;
+  z-index: 2;
+}
+
+.timeline-marker.current {
+  background: linear-gradient(45deg, #ffa500, #ff6b35);
+  box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
+  animation: pulse 2s infinite;
+}
+
+.timeline-marker.completed {
+  background: linear-gradient(45deg, #00d4aa, #00b894);
+  box-shadow: 0 0 15px rgba(0, 212, 170, 0.3);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.timeline-content {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  padding: 2.5rem;
+  border-radius: 16px;
+  border: 1px solid #3a3a3a;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.timeline-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.timeline-content::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 30px;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-right: 12px solid #1a1a1a;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.expand-icon {
+  display: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #00d4aa, #00b894);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.expandable-content {
+  transition: all 0.3s ease;
+}
+
+.education-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.education-badge.current {
+  background: linear-gradient(45deg, #ffa500, #ff6b35);
+  color: #fff;
+}
+
+.education-badge.completed {
+  background: linear-gradient(45deg, #00d4aa, #00b894);
+  color: #fff;
+}
+
+.education-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.education-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.institution {
+  color: #00d4aa;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.period {
+  color: #ffa500;
+  font-weight: 500;
+  background: rgba(255, 165, 0, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+.hours {
+  color: #888;
+  font-size: 0.9rem;
+  background: rgba(136, 136, 136, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+}
+
+.education-desc {
+  color: #c0c0c0;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.education-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.highlight {
+  background: linear-gradient(45deg, rgba(0, 212, 170, 0.2), rgba(0, 100, 200, 0.2));
+  color: #00d4aa;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid rgba(0, 212, 170, 0.3);
+}
+
+@media (max-width: 768px) {
+  .expandable-card {
+    cursor: pointer;
+  }
+  
+  .expand-icon {
+    display: flex;
+  }
+  
+  .expandable-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+  }
+  
+  .expandable-card.expanded .expandable-content {
+    max-height: 500px;
+    opacity: 1;
+    margin-top: 1rem;
+  }
+  
+  .expandable-card.expanded .expand-icon {
+    transform: rotate(45deg);
+    background: linear-gradient(45deg, #ff6b35, #ffa500);
+  }
+  
+  .timeline-content {
+    padding: 1.5rem;
+  }
+  
+  .education-title {
+    font-size: 1.2rem;
+  }
+  
+  .card-header {
+    margin-bottom: 0.5rem;
+  }
+  
+  .education-meta {
+    margin-bottom: 0.5rem;
+  }
+  
+  .education-timeline::before {
+    left: 20px;
+  }
+  
+  .timeline-item {
+    padding-left: 60px;
+  }
+  
+  .timeline-marker {
+    left: 8px;
+  }
+  
+  .timeline-content::before {
+    left: -8px;
+  }
+}
