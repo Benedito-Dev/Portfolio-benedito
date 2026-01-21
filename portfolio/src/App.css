@@ -468,10 +468,11 @@ h2 {
   font-size: 0.875rem;
   font-weight: 500;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease;
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  will-change: transform;
 }
 
 .skill-header {
@@ -485,7 +486,7 @@ h2 {
   max-height: 0;
   overflow: hidden;
   opacity: 0;
-  transition: all 0.3s ease;
+  transition: max-height 0.2s ease, opacity 0.15s ease;
   margin-top: 0;
 }
 
@@ -493,6 +494,7 @@ h2 {
   max-height: 120px;
   opacity: 1;
   margin-top: 1rem;
+  transition: max-height 0.2s ease, opacity 0.2s ease 0.1s;
 }
 
 .skill-info {
@@ -517,8 +519,9 @@ h2 {
   height: 100%;
   background: linear-gradient(90deg, #00d4aa, #00b894);
   border-radius: 3px;
-  transition: width 0.8s ease;
+  transition: width 0.4s ease;
   box-shadow: 0 0 8px rgba(0, 212, 170, 0.4);
+  will-change: width;
 }
 
 .skill-icon {
