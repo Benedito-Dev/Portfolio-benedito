@@ -13,11 +13,17 @@ function App() {
 
   const projects = [
     {
-      name: 'Sistema de Gestão',
-      description: 'Solução completa para controle de estoque e vendas',
-      tech: ['React', 'Node.js', 'PostgreSQL'],
+      name: '🩺 TecSim – Assistente de Enfermagem',
+      description: 'Aplicativo mobile que oferece orientações básicas sobre medicamentos, dosagens seguras e cuidados caseiros. Democratiza o acesso à informação médica confiável.',
+      tech: ['React Native', 'Node.js', 'Firestore', 'OpenFDA API'],
       status: 'Finalizado',
-      github: '#'
+      github: 'https://github.com/Benedito-Dev/TecSIM',
+      demo: 'https://tec-sim-web.vercel.app/',
+      loginInfo: {
+        email: 'farmaceutico@tecsim.com',
+        senha: 'TecSim123',
+        tipo: 'farmaceutico'
+      }
     },
     {
       name: 'API de Autenticação',
@@ -168,6 +174,18 @@ function App() {
                 <a href={project.github} className="project-link" target="_blank" rel="noopener noreferrer">
                   Ver no GitHub →
                 </a>
+                {project.demo && (
+                  <div>
+                    <a href={project.demo} className="project-link" target="_blank" rel="noopener noreferrer" style={{marginLeft: '1rem'}}>
+                      Ver Demo →
+                    </a>
+                    {project.loginInfo && (
+                      <div style={{marginTop: '0.5rem', fontSize: '0.8rem', color: '#888'}}>
+                        Login: {project.loginInfo.email} | Senha: {project.loginInfo.senha}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
