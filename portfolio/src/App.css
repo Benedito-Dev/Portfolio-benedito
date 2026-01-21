@@ -549,7 +549,7 @@ h2 {
   top: 0;
   bottom: 0;
   width: 3px;
-  background: linear-gradient(to bottom, #00d4aa, #ffa500, #00d4aa);
+  background: linear-gradient(to bottom, #ffa500, #00d4aa);
   border-radius: 2px;
 }
 
