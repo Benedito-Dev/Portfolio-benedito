@@ -437,6 +437,12 @@ h2 {
   font-weight: 500;
 }
 
+.project-links {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
 .project-link {
   color: #00d4aa;
   text-decoration: none;
@@ -446,6 +452,20 @@ h2 {
 
 .project-link:hover {
   color: #00b894;
+}
+
+.login-info {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(0, 212, 170, 0.1);
+  border-radius: 4px;
+  border-left: 3px solid #00d4aa;
+}
+
+.login-info small {
+  color: #c0c0c0;
+  font-size: 0.8rem;
+  font-family: monospace;
 }
 
 /* Philosophy Section */

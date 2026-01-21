@@ -171,19 +171,19 @@ function App() {
                     <span key={tech} className="tech-tag">{tech}</span>
                   ))}
                 </div>
-                <a href={project.github} className="project-link" target="_blank" rel="noopener noreferrer">
-                  Ver no GitHub →
-                </a>
-                {project.demo && (
-                  <div>
-                    <a href={project.demo} className="project-link" target="_blank" rel="noopener noreferrer" style={{marginLeft: '1rem'}}>
+                <div className="project-links">
+                  <a href={project.github} className="project-link" target="_blank" rel="noopener noreferrer">
+                    Ver no GitHub →
+                  </a>
+                  {project.demo && (
+                    <a href={project.demo} className="project-link" target="_blank" rel="noopener noreferrer">
                       Ver Demo →
                     </a>
-                    {project.loginInfo && (
-                      <div style={{marginTop: '0.5rem', fontSize: '0.8rem', color: '#888'}}>
-                        Login: {project.loginInfo.email} | Senha: {project.loginInfo.senha}
-                      </div>
-                    )}
+                  )}
+                </div>
+                {project.loginInfo && (
+                  <div className="login-info">
+                    <small>Login: {project.loginInfo.email} | Senha: {project.loginInfo.senha}</small>
                   </div>
                 )}
               </div>
