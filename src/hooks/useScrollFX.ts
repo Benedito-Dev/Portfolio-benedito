@@ -11,6 +11,25 @@ export function useScrollFX() {
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+    /* ===== Gate de visibilidade do hero =====
+       O Chrome renderiza abas pré-carregadas / em background antes de
+       ficarem visíveis. As animações CSS do hero começam pausadas e só
+       "rodam" quando a página está de fato visível, senão o clock corre
+       escondido e o hero "só aparece" quando você olha a aba. */
+    const root = document.documentElement
+    const releaseHero = () => root.classList.add('hero-ready')
+    if (document.visibilityState === 'visible') {
+      releaseHero()
+    } else {
+      const onVisible = () => {
+        if (document.visibilityState === 'visible') {
+          releaseHero()
+          document.removeEventListener('visibilitychange', onVisible)
+        }
+      }
+      document.addEventListener('visibilitychange', onVisible)
+    }
+
     /* ===== Reveal on scroll ===== */
     const reveals = document.querySelectorAll<HTMLElement>('.reveal')
     let io: IntersectionObserver | undefined

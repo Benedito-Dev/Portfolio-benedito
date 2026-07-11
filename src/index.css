@@ -148,6 +148,14 @@ body::before {
 .hero-anim > * {
   opacity: 0;
   animation: hero-in 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  /* Espera a página ficar visível: em nova aba/pré-render o Chrome
+     renderiza em background e o clock da animação correria "escondido". */
+  animation-play-state: paused;
+}
+.hero-ready .hero-anim > *,
+.hero-ready .hero-bg,
+.hero-ready .hero-fg {
+  animation-play-state: running;
 }
 .hero-anim > *:nth-child(1) { animation-delay: 0.05s; }
 .hero-anim > *:nth-child(2) { animation-delay: 0.18s; }
@@ -170,10 +178,12 @@ body::before {
 
 .hero-bg {
   animation: hero-bg-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+  animation-play-state: paused;
 }
 
 .hero-fg {
   animation: hero-fg-in 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -642,17 +652,21 @@ header {
 
 .stack-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   border: 1px solid var(--border-neon);
   border-radius: 16px;
   overflow: hidden;
   background: var(--card);
   box-shadow: 0 0 0 1px rgba(77, 159, 255, 0.04),
               0 20px 60px -30px var(--accent-glow);
+  /* estende a grade um pouco além do padding do container, só na Stack,
+     para as 6 colunas ganharem largura sem apertar */
+  margin-left: -1.8rem;
+  margin-right: -1.8rem;
 }
 
 .stack-col {
-  padding: 2rem 1.6rem;
+  padding: 2rem 1.3rem;
   border-right: 1px solid var(--border);
   background: rgba(0, 0, 0, 0.35);
   transition: background 0.25s ease,
@@ -672,7 +686,7 @@ header {
 
 .stack-col .icon {
   color: var(--muted);
-  margin-bottom: 3rem;
+  margin-bottom: 1.8rem;
   transition: color 0.25s ease, transform 0.25s ease;
 }
 
@@ -702,6 +716,110 @@ header {
 .stack-col li {
   color: var(--muted);
   font-size: 0.98rem;
+}
+
+/* ===== Palco pseudo-3D (Etapa 1) ===== */
+.stack-stage {
+  position: relative;
+  margin-top: 2.5rem;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stage-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 340px;
+  height: 300px;
+  transform: translate(-50%, -50%) scale(1);
+  background: radial-gradient(circle, rgba(77, 159, 255, 0.14), transparent 62%);
+  filter: blur(24px);
+  pointer-events: none;
+  transition: transform 0.34s ease, opacity 0.34s ease;
+}
+
+/* durante o colapso, o glow contrai e intensifica (o "ponto" do buraco negro) */
+.stage-glow.phase-collapsing {
+  transform: translate(-50%, -50%) scale(0.45);
+  opacity: 1.4;
+}
+
+/* no renascimento, o glow expande de volta */
+.stage-glow.phase-birthing {
+  transform: translate(-50%, -50%) scale(1.1);
+  opacity: 1;
+}
+
+.stage-object-wrap {
+  position: relative;
+  z-index: 1;
+  transform-origin: 50% 55%;
+  will-change: transform, opacity, filter;
+}
+
+.stage-object {
+  display: block;
+  width: 280px;
+  height: auto;
+  filter: drop-shadow(0 30px 44px rgba(0, 0, 0, 0.5));
+}
+
+/* ===== Colapso (implosão tipo buraco negro) ===== */
+.stage-object-wrap.phase-collapsing {
+  animation: stage-collapse 0.34s cubic-bezier(0.6, 0, 0.9, 0.3) forwards;
+}
+
+@keyframes stage-collapse {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: blur(0px);
+  }
+  70% {
+    transform: scale(0.18) rotate(180deg);
+    opacity: 0.9;
+    filter: blur(1px);
+  }
+  100% {
+    transform: scale(0) rotate(320deg);
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+
+/* ===== Renascimento (nasce do ponto, com leve overshoot) ===== */
+.stage-object-wrap.phase-birthing {
+  animation: stage-birth 0.46s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes stage-birth {
+  0% {
+    transform: scale(0) rotate(-140deg);
+    opacity: 0;
+    filter: blur(6px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-object-wrap.phase-collapsing,
+  .stage-object-wrap.phase-birthing {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
 }
 
 /* ===== Projetos ===== */
@@ -1080,21 +1198,48 @@ footer {
 }
 
 /* ===== Responsive ===== */
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
+  /* 6 colunas não cabem: quebra em 3 por linha (3x2) */
+  .stack-grid {
+    grid-template-columns: repeat(3, 1fr);
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .stack-col {
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stack-col:nth-child(3n) {
+    border-right: none;
+  }
+
+  .stack-col:nth-last-child(-n + 3) {
+    border-bottom: none;
+  }
+
+  .stack-col .icon {
+    margin-bottom: 1.6rem;
+  }
+}
+
+@media (max-width: 720px) {
+  /* 2 por linha (2x3) */
   .stack-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .stack-col {
-    border-bottom: 1px solid var(--border);
+  .stack-col:nth-child(3n) {
+    border-right: 1px solid var(--border);
   }
 
   .stack-col:nth-child(2n) {
     border-right: none;
   }
 
-  .stack-col .icon {
-    margin-bottom: 1.6rem;
+  .stack-col:nth-last-child(-n + 2) {
+    border-bottom: none;
   }
 }
 
@@ -1171,5 +1316,19 @@ footer {
 
   .btn {
     justify-content: center;
+  }
+
+  /* stack em coluna única no celular */
+  .stack-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stack-col {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stack-col:last-child {
+    border-bottom: none;
   }
 }

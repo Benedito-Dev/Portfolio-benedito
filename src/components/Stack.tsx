@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import { useState } from 'react'
+import { StackStage } from './StackStage'
 
 type StackItem = {
   title: string
@@ -17,8 +19,18 @@ const svgProps = {
 
 const columns: StackItem[] = [
   {
+    title: 'Linguagens',
+    items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C#'],
+    icon: (
+      <svg {...svgProps}>
+        <polyline points="4 17 10 11 4 5" />
+        <line x1="12" y1="19" x2="20" y2="19" />
+      </svg>
+    ),
+  },
+  {
     title: 'Frontend',
-    items: ['React', 'Next.js', 'TypeScript'],
+    items: ['React', 'Next.js', 'Tailwind CSS'],
     icon: (
       <svg {...svgProps}>
         <polyline points="16 18 22 12 16 6" />
@@ -38,7 +50,7 @@ const columns: StackItem[] = [
   },
   {
     title: 'Backend',
-    items: ['Node.js', 'Express'],
+    items: ['Node.js', 'Express', 'REST APIs'],
     icon: (
       <svg {...svgProps}>
         <rect x="3" y="4" width="18" height="7" rx="1.5" />
@@ -48,7 +60,7 @@ const columns: StackItem[] = [
   },
   {
     title: 'Banco de Dados',
-    items: ['PostgreSQL'],
+    items: ['PostgreSQL', 'MongoDB', 'Redis', 'Firebase'],
     icon: (
       <svg {...svgProps}>
         <ellipse cx="12" cy="5" rx="9" ry="3" />
@@ -69,6 +81,9 @@ const columns: StackItem[] = [
 ]
 
 export function Stack() {
+  // categoria em foco no palco (0 = Linguagens ... começa no Frontend p/ teste)
+  const [activeIndex, setActiveIndex] = useState(1)
+
   return (
     <section id="stack" className="container stack">
       <div className="stack-head reveal">
@@ -77,14 +92,18 @@ export function Stack() {
           <h2>As ferramentas em que confio para construir software em produção.</h2>
         </div>
         <p>
-          Escolhidas por confiabilidade, não por novidade. Cada
-          uma conquistou seu lugar em múltiplos produtos em produção.
+          Escolhidas por confiabilidade, não por hype. São as ferramentas
+          que uso no dia a dia e que sustentam os projetos que coloco no ar.
         </p>
       </div>
 
-      <div className="stack-grid">
+      <div className="stack-grid reveal">
         {columns.map((col, i) => (
-          <div className="stack-col reveal" data-delay={String(i + 1)} key={col.title}>
+          <div
+            className={`stack-col${i === activeIndex ? ' active' : ''}`}
+            key={col.title}
+            onMouseEnter={() => setActiveIndex(i)}
+          >
             <span className="icon">{col.icon}</span>
             <h3>{col.title}</h3>
             <ul>
@@ -95,6 +114,8 @@ export function Stack() {
           </div>
         ))}
       </div>
+
+      <StackStage activeIndex={activeIndex} />
     </section>
   )
 }
