@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
-import { useState } from 'react'
-import { StackStage } from './StackStage'
+import { techLogos } from './techLogos'
 
 type StackItem = {
   title: string
@@ -81,9 +80,6 @@ const columns: StackItem[] = [
 ]
 
 export function Stack() {
-  // categoria em foco no palco (0 = Linguagens ... começa no Frontend p/ teste)
-  const [activeIndex, setActiveIndex] = useState(1)
-
   return (
     <section id="stack" className="container stack">
       <div className="stack-head reveal">
@@ -98,24 +94,23 @@ export function Stack() {
       </div>
 
       <div className="stack-grid reveal">
-        {columns.map((col, i) => (
-          <div
-            className={`stack-col${i === activeIndex ? ' active' : ''}`}
-            key={col.title}
-            onMouseEnter={() => setActiveIndex(i)}
-          >
+        {columns.map((col) => (
+          <div className="stack-col" key={col.title}>
             <span className="icon">{col.icon}</span>
             <h3>{col.title}</h3>
             <ul>
               {col.items.map((item) => (
-                <li key={item}>{item}</li>
+                <li key={item}>
+                  <span className="tech-logo" aria-hidden="true">
+                    {techLogos[item]}
+                  </span>
+                  {item}
+                </li>
               ))}
             </ul>
           </div>
         ))}
       </div>
-
-      <StackStage activeIndex={activeIndex} />
     </section>
   )
 }

@@ -716,6 +716,24 @@ header {
 .stack-col li {
   color: var(--muted);
   font-size: 0.98rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.tech-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+}
+
+.tech-logo svg {
+  width: 19px;
+  height: 19px;
+  display: block;
 }
 
 /* ===== Palco pseudo-3D (Etapa 1) ===== */
