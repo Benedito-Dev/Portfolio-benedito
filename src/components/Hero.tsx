@@ -32,11 +32,22 @@ export function Hero() {
       </div>
 
       <div className="hero-visual">
-        <img className="hero-bg" src="/fundo.png" alt="" aria-hidden="true" />
+        <img
+          className="hero-bg"
+          src="/fundo.webp"
+          alt=""
+          aria-hidden="true"
+          width={1400}
+          height={927}
+          decoding="async"
+        />
         <img
           className="hero-fg"
-          src="/mentor-recorte.png"
+          src="/mentor-recorte.webp"
           alt="Benedito Bittencourt apresentando no Hackathon Pague Menos"
+          width={1400}
+          height={926}
+          decoding="async"
         />
       </div>
     </section>

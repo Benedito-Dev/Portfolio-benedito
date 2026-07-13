@@ -73,35 +73,67 @@ export function useScrollFX() {
     }))
 
     let rafId = 0
+    let running = false
     // easing factor for the smoothing (0..1) — lower = smoother/laggier
     const ease = 0.12
+    // below this distance (px) the easing is visually settled → stop the loop
+    const EPSILON = 0.1
 
     const tick = () => {
       const y = window.pageYOffset
       const vh = window.innerHeight
 
-      parallaxEls.forEach((item) => {
+      /* FASE 1 — LEITURA: mede tudo de uma vez.
+         Ler geometria depois de escrever style força reflow síncrono. Por isso
+         todos os getBoundingClientRect() acontecem ANTES de qualquer escrita. */
+      const targets = parallaxEls.map((item) => {
         const rect = item.el.getBoundingClientRect()
         // distance of the element's center from the viewport center
         const center = rect.top + rect.height / 2 - vh / 2
-        const target = center * item.speed
+        return center * item.speed
+      })
+
+      /* FASE 2 — ESCRITA: nenhuma leitura de layout daqui pra baixo. */
+      let settled = true
+
+      parallaxEls.forEach((item, i) => {
+        const target = targets[i]
+        if (Math.abs(target - item.current) > EPSILON) settled = false
         item.current += (target - item.current) * ease
         item.el.style.transform = `translate3d(0,${item.current.toFixed(2)}px,0)`
       })
 
       glowEls.forEach((item) => {
         const target = y * item.speed
+        if (Math.abs(target - item.current) > EPSILON) settled = false
         item.current += (target - item.current) * ease
         item.el.style.transform = `translate3d(0,${item.current.toFixed(2)}px,0)`
       })
 
+      /* Assentou? Dorme. O loop volta a rodar no próximo scroll/resize.
+         (Antes ele girava a 60fps para sempre, mesmo com a página parada.) */
+      if (settled) {
+        running = false
+        return
+      }
+
       rafId = window.requestAnimationFrame(tick)
     }
 
-    rafId = window.requestAnimationFrame(tick)
+    const wake = () => {
+      if (running) return
+      running = true
+      rafId = window.requestAnimationFrame(tick)
+    }
+
+    window.addEventListener('scroll', wake, { passive: true })
+    window.addEventListener('resize', wake)
+    wake() // posiciona os elementos no load
 
     return () => {
       io?.disconnect()
+      window.removeEventListener('scroll', wake)
+      window.removeEventListener('resize', wake)
       window.cancelAnimationFrame(rafId)
     }
   }, [])

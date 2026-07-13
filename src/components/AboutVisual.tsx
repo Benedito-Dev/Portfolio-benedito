@@ -2,8 +2,8 @@
  * Visual da dobra "Sobre": o personagem cartoon (vídeo) olhando para o
  * canto superior direito, de onde surge um balão de pensamento com "?".
  *
- * O vídeo (/public/cartoon.mp4) exibe o primeiro frame (#t=0.001) como
- * estado parado e toca uma vez quando a seção entra na viewport.
+ * O vídeo (/public/cartoon.mp4) exibe o poster como estado parado e toca uma
+ * vez quando a seção entra na viewport. Só é baixado ao se aproximar da dobra.
  *
  * O balão é 100% SVG/CSS — nítido, na paleta da marca — e "acende"
  * quando a seção entra na viewport (classe .in-view via useScrollFX).
@@ -26,6 +26,20 @@ export function AboutVisual() {
     v.addEventListener('loadedmetadata', applyRate)
     v.addEventListener('play', applyRate)
 
+    // O vídeo nasce com preload="none" (0 byte no load da página). O download
+    // começa 300px antes da dobra entrar na tela, para o play não engasgar.
+    const preloader = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          v.preload = 'auto'
+          v.load()
+          preloader.disconnect()
+        }
+      },
+      { rootMargin: '300px 0px' },
+    )
+    preloader.observe(v)
+
     // toca uma única vez, assim que o vídeo entra na viewport (chega na dobra)
     let played = false
     const io = new IntersectionObserver(
@@ -45,6 +59,7 @@ export function AboutVisual() {
     return () => {
       v.removeEventListener('loadedmetadata', applyRate)
       v.removeEventListener('play', applyRate)
+      preloader.disconnect()
       io.disconnect()
     }
   }, [])
@@ -56,9 +71,12 @@ export function AboutVisual() {
           ref={videoRef}
           className="cartoon-video"
           src="/cartoon.mp4#t=0.001"
+          poster="/cartoon-poster.webp"
+          width={1280}
+          height={720}
           muted
           playsInline
-          preload="auto"
+          preload="none"
         />
       </div>
 

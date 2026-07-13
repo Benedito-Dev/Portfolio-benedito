@@ -8,6 +8,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- SPA: as imagens do hero só seriam descobertas depois que o JS roda.
+       O preload começa o download já na leitura do HTML (melhora o LCP). -->
+  <link rel="preload" as="image" href="/mentor-recorte.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="/fundo.webp" />
 </head>
 <body>
   <div id="root"></div>
