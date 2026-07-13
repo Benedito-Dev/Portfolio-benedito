@@ -6,6 +6,8 @@ import { useEffect } from 'react'
  *   - .reveal          -> fades/slides in when it enters the viewport
  *   - [data-parallax]  -> translates on scroll at the given speed
  *   - [data-glow]      -> translates on scroll at the given speed
+ *
+ * O parallax acompanha o scroll 1:1 (sem suavização) — ver comentário abaixo.
  */
 export function useScrollFX() {
   useEffect(() => {
@@ -55,85 +57,97 @@ export function useScrollFX() {
       return () => io?.disconnect()
     }
 
-    /* ===== Parallax on scroll (smoothed with a continuous rAF loop) ===== */
-    const parallaxEls = Array.from(
-      document.querySelectorAll<HTMLElement>('[data-parallax]'),
-    ).map((el) => ({
-      el,
-      speed: parseFloat(el.getAttribute('data-parallax') || '0') || 0,
-      current: 0,
-    }))
+    /* ===== Parallax on scroll =====
+       O deslocamento é função DIRETA da posição do scroll — sem easing, sem
+       perseguição. O elemento chega na posição certa no mesmo frame em que a
+       página rola e para exatamente quando o scroll para.
 
-    const glowEls = Array.from(
-      document.querySelectorAll<HTMLElement>('[data-glow]'),
-    ).map((el) => ({
-      el,
-      speed: parseFloat(el.getAttribute('data-glow') || '0') || 0,
-      current: 0,
-    }))
+       (Antes havia um amortecedor: cada frame andava só 12% do caminho até o
+       alvo. O efeito visual era o mesmo, mas o conteúdo chegava ~130ms atrasado
+       e ainda deslizava ~600ms depois de você soltar o scroll — era isso que
+       dava a sensação de página "travada/grudenta", e não perda de frames.) */
+
+    type Item = {
+      el: HTMLElement
+      speed: number
+      /** topo do elemento em coordenadas do documento, SEM o transform aplicado */
+      docTop: number
+      height: number
+    }
+
+    const collect = (attr: string): Item[] =>
+      Array.from(document.querySelectorAll<HTMLElement>(`[${attr}]`)).map((el) => ({
+        el,
+        speed: parseFloat(el.getAttribute(attr) || '0') || 0,
+        docTop: 0,
+        height: 0,
+      }))
+
+    const parallaxEls = collect('data-parallax')
+    const glowEls = collect('data-glow')
+
+    let vh = window.innerHeight
+
+    /* Mede a geometria de layout UMA vez (e a cada resize), não a cada frame.
+       getBoundingClientRect() já inclui o transform aplicado, então zeramos o
+       transform antes de medir — senão a leitura realimentaria a si mesma. */
+    const measure = () => {
+      vh = window.innerHeight
+      const y = window.pageYOffset
+      parallaxEls.forEach((item) => {
+        item.el.style.transform = ''
+        const rect = item.el.getBoundingClientRect()
+        item.docTop = rect.top + y
+        item.height = rect.height
+      })
+    }
 
     let rafId = 0
-    let running = false
-    // easing factor for the smoothing (0..1) — lower = smoother/laggier
-    const ease = 0.12
-    // below this distance (px) the easing is visually settled → stop the loop
-    const EPSILON = 0.1
+    let queued = false
 
-    const tick = () => {
+    const render = () => {
+      queued = false
       const y = window.pageYOffset
-      const vh = window.innerHeight
 
-      /* FASE 1 — LEITURA: mede tudo de uma vez.
-         Ler geometria depois de escrever style força reflow síncrono. Por isso
-         todos os getBoundingClientRect() acontecem ANTES de qualquer escrita. */
-      const targets = parallaxEls.map((item) => {
-        const rect = item.el.getBoundingClientRect()
-        // distance of the element's center from the viewport center
-        const center = rect.top + rect.height / 2 - vh / 2
-        return center * item.speed
-      })
-
-      /* FASE 2 — ESCRITA: nenhuma leitura de layout daqui pra baixo. */
-      let settled = true
-
-      parallaxEls.forEach((item, i) => {
-        const target = targets[i]
-        if (Math.abs(target - item.current) > EPSILON) settled = false
-        item.current += (target - item.current) * ease
-        item.el.style.transform = `translate3d(0,${item.current.toFixed(2)}px,0)`
+      parallaxEls.forEach((item) => {
+        // distância do centro do elemento até o centro da viewport
+        const center = item.docTop + item.height / 2 - y - vh / 2
+        const offset = center * item.speed
+        item.el.style.transform = `translate3d(0,${offset.toFixed(2)}px,0)`
       })
 
       glowEls.forEach((item) => {
-        const target = y * item.speed
-        if (Math.abs(target - item.current) > EPSILON) settled = false
-        item.current += (target - item.current) * ease
-        item.el.style.transform = `translate3d(0,${item.current.toFixed(2)}px,0)`
+        const offset = y * item.speed
+        item.el.style.transform = `translate3d(0,${offset.toFixed(2)}px,0)`
       })
-
-      /* Assentou? Dorme. O loop volta a rodar no próximo scroll/resize.
-         (Antes ele girava a 60fps para sempre, mesmo com a página parada.) */
-      if (settled) {
-        running = false
-        return
-      }
-
-      rafId = window.requestAnimationFrame(tick)
     }
 
-    const wake = () => {
-      if (running) return
-      running = true
-      rafId = window.requestAnimationFrame(tick)
+    /* Um render por frame, no máximo. Nenhuma leitura de layout aqui dentro:
+       o rAF só lê o scroll e escreve transforms. */
+    const onScroll = () => {
+      if (queued) return
+      queued = true
+      rafId = window.requestAnimationFrame(render)
     }
 
-    window.addEventListener('scroll', wake, { passive: true })
-    window.addEventListener('resize', wake)
-    wake() // posiciona os elementos no load
+    const onResize = () => {
+      measure()
+      render()
+    }
+
+    measure()
+    render()
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onResize)
+    // fontes/imagens podem mudar o layout depois do mount → remede
+    window.addEventListener('load', onResize)
 
     return () => {
       io?.disconnect()
-      window.removeEventListener('scroll', wake)
-      window.removeEventListener('resize', wake)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('load', onResize)
       window.cancelAnimationFrame(rafId)
     }
   }, [])
