@@ -19,7 +19,7 @@ export default function App() {
 
       <Navbar />
 
-      <main>
+      <main id="conteudo">
         <Hero />
         <About />
         <Stack />
