@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { onIntroDone } from '../introGate'
 
 /**
  * Reveal-on-scroll + parallax effects.
@@ -19,7 +20,7 @@ export function useScrollFX() {
        "rodam" quando a página está de fato visível, senão o clock corre
        escondido e o hero "só aparece" quando você olha a aba. */
     const root = document.documentElement
-    const releaseHero = () => root.classList.add('hero-ready')
+    const releaseHero = () => onIntroDone(() => root.classList.add('hero-ready'))
     if (document.visibilityState === 'visible') {
       releaseHero()
     } else {

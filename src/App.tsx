@@ -6,6 +6,8 @@ import { Projects } from './components/Projects'
 import { Process } from './components/Process'
 import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
+import { DevTerminal } from './components/DevTerminal'
+import { IntroSplash } from './components/IntroSplash'
 import { useScrollFX } from './hooks/useScrollFX'
 
 export default function App() {
@@ -13,6 +15,7 @@ export default function App() {
 
   return (
     <>
+      <IntroSplash />
       <div className="glow glow-1" data-glow="0.22"></div>
       <div className="glow glow-2" data-glow="-0.16"></div>
       <div className="glow glow-3" data-glow="0.12"></div>
@@ -29,6 +32,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <DevTerminal />
     </>
   )
 }
