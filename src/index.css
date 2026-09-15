@@ -469,7 +469,8 @@ header.is-scrolled .nav {
   grid-template-columns: 1.1fr 0.9fr;
   gap: 3rem;
   align-items: center;
-  padding: var(--section-pad) 0;
+  padding-top: var(--section-pad);
+  padding-bottom: var(--section-pad);
 }
 
 .badge {
@@ -627,7 +628,8 @@ header.is-scrolled .nav {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
-  padding: var(--section-pad) 0;
+  padding-top: var(--section-pad);
+  padding-bottom: var(--section-pad);
   align-items: start;
 }
 
@@ -812,7 +814,8 @@ header.is-scrolled .nav {
 
 /* ===== Stack ===== */
 .stack {
-  padding: var(--section-pad) 0;
+  padding-top: var(--section-pad);
+  padding-bottom: var(--section-pad);
 }
 
 .stack-head {
@@ -1028,7 +1031,8 @@ header.is-scrolled .nav {
 
 /* ===== Projetos ===== */
 .projects {
-  padding: var(--section-pad) 0;
+  padding-top: var(--section-pad);
+  padding-bottom: var(--section-pad);
 }
 
 .projects-head {
@@ -1231,7 +1235,8 @@ header.is-scrolled .nav {
 
 /* ===== Processo ===== */
 .process {
-  padding: var(--section-pad) 0;
+  padding-top: var(--section-pad);
+  padding-bottom: var(--section-pad);
 }
 
 .process > h2 {
