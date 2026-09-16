@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { ProcessVisual } from './ProcessVisual'
 
 const steps = [
   {
@@ -97,6 +98,7 @@ export function Process() {
       <span className="section-label">Como eu trabalho</span>
       <h2>Quatro passos que sigo em cada projeto.</h2>
 
+      <div className="process-layout">
       <ol ref={listRef} className="process-steps">
         {steps.map((step, i) => (
           <li className={`process-step${active === i ? ' is-active' : ''}`} aria-current={active === i ? 'step' : undefined} key={step.num}>
@@ -104,10 +106,13 @@ export function Process() {
             <div className="process-step-body">
               <h3>{step.title}</h3>
               <p>{step.text}</p>
+              <div className="process-mobile-visual"><ProcessVisual active={i} /></div>
             </div>
           </li>
         ))}
       </ol>
+      <div className="process-desktop-visual"><ProcessVisual active={active} /></div>
+      </div>
       </div>
     </section>
   )
