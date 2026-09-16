@@ -31,12 +31,15 @@ export function PrumoVisual() {
     // A entrada acontece uma vez; a ilustração permanece visível sem animações.
     let observer: IntersectionObserver | undefined
     if (!motion.matches && 'IntersectionObserver' in window) {
+      // Espera a maior parte da composição aparecer. Em telas baixas,
+      // limita a área exigida para que o gatilho continue alcançável.
+      const revealRatio = Math.min(0.65, (window.innerHeight * 0.6) / Math.max(stage.clientHeight, 1))
       stage.classList.add('prumo-pending')
       observer = new IntersectionObserver(([entry]) => {
-        if (!entry.isIntersecting) return
+        if (!entry.isIntersecting || entry.intersectionRatio < revealRatio) return
         stage.classList.add('prumo-entered')
         observer?.disconnect()
-      }, { threshold: 0.25 })
+      }, { threshold: revealRatio })
       observer.observe(stage)
     }
     const preferencesChanged = () => {
