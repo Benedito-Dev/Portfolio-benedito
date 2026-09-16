@@ -33,7 +33,7 @@ body {
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* faint grid texture over the whole page */
@@ -1322,28 +1322,57 @@ header.is-scrolled .nav {
 .process {
   padding-top: var(--section-pad);
   padding-bottom: var(--section-pad);
+  scroll-margin-top: 80px;
 }
 
-.process > h2 {
+.process-pinned {
+  min-height: calc(var(--section-pad) * 2 + var(--process-content-height) + var(--process-travel));
+}
+
+.process-pinned .process-content {
+  position: sticky;
+  top: 96px;
+}
+
+.process-content > h2 {
   font-size: clamp(2rem, 3.6vw, 3rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.08;
-  margin-bottom: 3.5rem;
+  margin-bottom: 2rem;
 }
 
 .process-steps {
+  position: relative;
+  isolation: isolate;
   list-style: none;
   display: flex;
   flex-direction: column;
   max-width: 760px;
 }
 
+.process-steps::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--step-height, 0px);
+  transform: translateY(var(--step-top, 0px));
+  border: 1px solid rgba(77, 159, 255, 0.28);
+  border-left: 3px solid var(--accent);
+  border-radius: 12px;
+  background: rgba(180, 205, 240, 0.065);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), height 420ms ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
 .process-step {
   display: flex;
   gap: 2rem;
   align-items: baseline;
-  padding: 2rem 0;
+  padding: 1.2rem 1.4rem;
   border-top: 1px solid var(--border);
 }
 
@@ -1360,6 +1389,17 @@ header.is-scrolled .nav {
   min-width: 3.5rem;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
+  transition: opacity 300ms ease;
+}
+
+.process-step.is-active .num { opacity: 1; }
+.process-step.is-active p { color: #c6cbd3; }
+.process-step-body p { transition: color 300ms ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .process-steps::before, .process-step .num, .process-step-body p {
+    transition: none;
+  }
 }
 
 .process-step-body h3 {
