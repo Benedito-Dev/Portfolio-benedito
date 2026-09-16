@@ -1084,13 +1084,10 @@ header.is-scrolled .nav {
   display: block;
   width: 100%;
   height: auto;
-  border: 1px solid #343a40;
-  border-radius: 12px;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
 }
 
 .prumo-preview figcaption {
-  margin-top: 0.75rem;
+  margin-top: 0;
   color: var(--muted);
   text-align: center;
   font-size: 0.7rem;
