@@ -1,8 +1,74 @@
-﻿/** Composição das telas Painel e NovaVenda; todos os valores são ilustrativos. */
+import { useEffect, useRef } from 'react'
+
+/** Composição das telas Painel e NovaVenda; todos os valores são ilustrativos. */
 export function PrumoVisual() {
+  const stageRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const stage = stageRef.current
+    if (!stage) return
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const mouse = window.matchMedia('(hover: hover) and (pointer: fine)')
+    let frame = 0
+    let x = 0
+    let y = 0
+    const render = () => {
+      frame = 0
+      stage.style.setProperty('--prumo-x', String(x))
+      stage.style.setProperty('--prumo-y', String(y))
+    }
+    const queue = () => {
+      if (!frame) frame = window.requestAnimationFrame(render)
+    }
+    const reset = () => { x = 0; y = 0; queue() }
+    const move = (event: PointerEvent) => {
+      if (motion.matches || !mouse.matches || event.pointerType !== 'mouse') return
+      const rect = stage.getBoundingClientRect()
+      x = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width) * 2 - 1))
+      y = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height) * 2 - 1))
+      queue()
+    }
+    // A entrada acontece uma vez; a ilustração permanece visível sem animações.
+    let observer: IntersectionObserver | undefined
+    if (!motion.matches && 'IntersectionObserver' in window) {
+      stage.classList.add('prumo-pending')
+      observer = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return
+        stage.classList.add('prumo-entered')
+        observer?.disconnect()
+      }, { threshold: 0.25 })
+      observer.observe(stage)
+    }
+    const preferencesChanged = () => {
+      reset()
+      if (motion.matches) {
+        stage.classList.remove('prumo-pending')
+        observer?.disconnect()
+      }
+    }
+    stage.addEventListener('pointermove', move)
+    stage.addEventListener('pointerleave', reset)
+    stage.addEventListener('pointercancel', reset)
+    motion.addEventListener('change', preferencesChanged)
+    mouse.addEventListener('change', preferencesChanged)
+    return () => {
+      observer?.disconnect()
+      window.cancelAnimationFrame(frame)
+      stage.removeEventListener('pointermove', move)
+      stage.removeEventListener('pointerleave', reset)
+      stage.removeEventListener('pointercancel', reset)
+      motion.removeEventListener('change', preferencesChanged)
+      mouse.removeEventListener('change', preferencesChanged)
+      stage.classList.remove('prumo-pending', 'prumo-entered')
+      stage.style.removeProperty('--prumo-x')
+      stage.style.removeProperty('--prumo-y')
+    }
+  }, [])
   return (
     <figure className="prumo-preview">
-      <svg viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prumo no desktop e no celular: painel de faturamento, indicadores e produtos mais vendidos ao fundo; tela de nova venda no celular em primeiro plano. Dados fictícios.">
+      <div ref={stageRef} className="prumo-stage" role="img" aria-label="Prumo no desktop e no celular: painel de faturamento, indicadores e produtos mais vendidos ao fundo; tela de nova venda no celular em primeiro plano. Dados fictícios.">
+        <div className="prumo-device prumo-monitor"><div className="prumo-tilt">
+        <svg viewBox="0 0 900 700" aria-hidden="true" focusable="false">
         <g fontFamily="Inter, sans-serif">
           {/* Monitor: o painel mantém navegação lateral e a hierarquia do produto. */}
           <ellipse cx="418" cy="587" rx="350" ry="23" fill="#000" opacity="0.22" />
@@ -37,7 +103,7 @@ export function PrumoVisual() {
           <text x="192" y="243" fontSize="12" fontWeight="600" fill="#16191d">Faturamento por dia</text>
           <g stroke="#e6e9eb"><path d="M198 272h342M198 310h342M198 348h342" /></g>
           <path d="M198 347 231 330 264 340 299 293 333 309 367 279 400 291 436 268 470 284 505 254 540 265V367H198Z" fill="#0e7c86" opacity="0.12" />
-          <path d="m198 347 33-17 33 10 35-47 34 16 34-30 33 12 36-23 34 16 35-30 35 11" fill="none" stroke="#0e7c86" strokeWidth="3" strokeLinejoin="round" />
+          <path className="prumo-chart-line" pathLength="1" d="m198 347 33-17 33 10 35-47 34 16 34-30 33 12 36-23 34 16 35-30 35 11" fill="none" stroke="#0e7c86" strokeWidth="3" strokeLinejoin="round" />
           <g fontSize="9" fill="#565d66"><text x="198" y="384">01 set</text><text x="350" y="384">15 set</text><text x="508" y="384">30 set</text></g>
           <rect x="574" y="218" width="228" height="180" rx="5" fill="#fff" />
           <text x="588" y="243" fontSize="11" fontWeight="600" fill="#16191d">Recebimento por pagamento</text>
@@ -55,6 +121,12 @@ export function PrumoVisual() {
           <rect x="275" y="452" width="161" height="5" rx="2" fill="#0e7c86" />
           <text x="541" y="460" textAnchor="end" fontSize="11" fill="#16191d">120 un.</text>
 
+        </g>
+        </svg>
+        </div></div>
+        <div className="prumo-device prumo-phone"><div className="prumo-tilt">
+        <svg viewBox="0 0 900 700" aria-hidden="true" focusable="false">
+        <g fontFamily="Inter, sans-serif">
           {/* Celular: formulário em coluna e ação fixa, como no layout mobile. */}
           <rect x="616" y="255" width="236" height="412" rx="32" fill="#000" opacity="0.28" />
           <rect x="603" y="240" width="238" height="414" rx="30" fill="#16191d" stroke="#53606b" strokeWidth="2" />
@@ -84,6 +156,8 @@ export function PrumoVisual() {
           <rect x="689" y="635" width="66" height="4" rx="2" fill="#16191d" />
         </g>
       </svg>
+      </div></div>
+      </div>
       <figcaption>Painel e venda no celular · telas simplificadas com dados de exemplo</figcaption>
     </figure>
   )

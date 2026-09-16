@@ -1080,6 +1080,82 @@ header.is-scrolled .nav {
   margin: 0;
 }
 
+.prumo-stage {
+  position: relative;
+  aspect-ratio: 9 / 7;
+  perspective: 1000px;
+  --prumo-x: 0;
+  --prumo-y: 0;
+}
+
+.prumo-device {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.prumo-tilt {
+  width: 100%;
+  height: 100%;
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.prumo-monitor, .prumo-monitor .prumo-tilt {
+  transform-origin: 47% 45%;
+}
+
+.prumo-phone, .prumo-phone .prumo-tilt {
+  transform-origin: 80% 64%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .prumo-pending:not(.prumo-entered) .prumo-device {
+    opacity: 0;
+  }
+
+  .prumo-pending.prumo-entered .prumo-monitor {
+    animation: prumo-monitor-enter 1050ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .prumo-pending.prumo-entered .prumo-phone {
+    animation: prumo-phone-enter 1100ms 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .prumo-pending.prumo-entered .prumo-chart-line {
+    stroke-dasharray: 1;
+    animation: prumo-chart-draw 900ms 650ms ease-out both;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .prumo-monitor .prumo-tilt {
+    transform: perspective(1000px) translate3d(calc(var(--prumo-x) * 4px), calc(var(--prumo-y) * 3px), 0) rotateX(calc(var(--prumo-y) * -2deg)) rotateY(calc(var(--prumo-x) * 3deg));
+  }
+
+  .prumo-phone .prumo-tilt {
+    transform: perspective(1000px) translate3d(calc(var(--prumo-x) * 12px), calc(var(--prumo-y) * 9px), 0) rotateX(calc(var(--prumo-y) * -4deg)) rotateY(calc(var(--prumo-x) * 5deg));
+  }
+}
+
+@keyframes prumo-monitor-enter {
+  from { opacity: 0; transform: translate3d(-4%, 5%, -160px) rotateX(10deg) rotateY(16deg) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes prumo-phone-enter {
+  from { opacity: 0; transform: translate3d(12%, 8%, 100px) rotateY(-24deg) rotateZ(9deg) scale(0.9); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes prumo-chart-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prumo-tilt { transition: none; }
+}
+
 .prumo-preview svg {
   display: block;
   width: 100%;
