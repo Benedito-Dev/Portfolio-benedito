@@ -33,7 +33,7 @@ src/
     ├── About.tsx
     ├── AboutVisual.tsx      # vídeo + balão de pensamento
     ├── Stack.tsx
-    ├── Projects.tsx         # case study (TecSIM)
+    ├── Projects.tsx         # case study (Prumo — gestão para depósitos)
     ├── Process.tsx
     ├── Contact.tsx
     ├── Footer.tsx

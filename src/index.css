@@ -1075,13 +1075,25 @@ header.is-scrolled .nav {
   order: 1;
 }
 
-.case-visual.phone {
-  background: radial-gradient(circle at 60% 45%, #222834, #14171d 70%);
+.prumo-preview {
+  width: 92%;
+  margin: 0;
 }
 
-.case-visual.phone svg {
-  width: 42%;
-  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.6));
+.prumo-preview svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #343a40;
+  border-radius: 12px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+}
+
+.prumo-preview figcaption {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.7rem;
 }
 
 .case-visual {

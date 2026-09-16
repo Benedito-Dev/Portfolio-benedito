@@ -22,9 +22,10 @@ const COMMANDS: Record<string, string[]> = {
     'PostgreSQL · MongoDB · Firebase · Docker · Git',
   ],
   projetos: [
-    'TecSIM — assistente de enfermagem mobile (React Native + Node.js + Firestore)',
-    'demo: https://tec-sim-web.vercel.app/',
-    'github: https://github.com/Benedito-Dev/TecSIM',
+    'Prumo — gestão para depósitos de materiais de construção (React + Node.js + PostgreSQL)',
+    'Vendas, fiado, indicadores e o assistente de IA Zé.',
+    'projeto: https://prumo-omega.vercel.app/',
+    'github: https://github.com/Benedito-Dev/Prumo',
   ],
   contato: [
     'email: beneditobittencourtt@gmail.com',
