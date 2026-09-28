@@ -24,6 +24,12 @@ const steps = [
   },
 ]
 
+const clamp = (value: number) => Math.max(0, Math.min(1, value))
+const sum = (values: number[]) => values.reduce((total, value) => total + value, 0)
+const setVar = (el: HTMLElement, name: string, value: string) => {
+  if (el.style.getPropertyValue(name) !== value) el.style.setProperty(name, value)
+}
+
 export function Process() {
   const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -35,61 +41,101 @@ export function Process() {
     const content = contentRef.current
     const list = listRef.current
     if (!section || !content || !list) return
+    const layout = content.querySelector<HTMLElement>('.process-layout')!
+    const visual = content.querySelector<HTMLElement>('.process-desktop-visual')!
+    const art = visual.querySelector('svg')!
     const rows = Array.from(list.querySelectorAll<HTMLLIElement>('.process-step'))
+    const texts = rows.map(row => row.querySelector<HTMLElement>('.process-step-text')!)
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const wide = window.matchMedia('(min-width: 1101px)')
+    const top = 84 // logo abaixo da navbar compacta (64px)
+    const bottom = 16
     let frame = 0
+    let measureFrame = 0
     let pinned = false
+    let compact = false
     let distance = 0
+    let padding = 0
     let current = -1
-    const top = 96
+    let base: number[] = [] // altura de cada passo sem o parágrafo
+    let text: number[] = [] // altura do parágrafo de cada passo
 
-    const highlight = (index: number) => {
-      const row = rows[index]
-      list.style.setProperty('--step-top', `${row.offsetTop}px`)
-      list.style.setProperty('--step-height', `${row.offsetHeight}px`)
+    // Altura final de cada passo, e não a do meio da transição de abrir/fechar.
+    const rowHeight = (i: number, index: number) => base[i] + (compact && i !== index ? 0 : text[i])
+
+    const highlight = (index: number, force: boolean) => {
+      if (index === current && !force) return
+      let y = 0
+      for (let i = 0; i < index; i++) y += rowHeight(i, index)
+      setVar(list, '--step-top', `${y}px`)
+      setVar(list, '--step-height', `${rowHeight(index, index)}px`)
       if (index !== current) { current = index; setActive(index) }
     }
-    const update = () => {
+    const update = (force = false) => {
       frame = 0
       let index = 0
       if (pinned) {
-        const start = section.getBoundingClientRect().top + parseFloat(getComputedStyle(section).paddingTop) - top
-        index = Math.max(0, Math.min(steps.length - 1, Math.floor((-start / distance) * steps.length)))
+        const start = section.getBoundingClientRect().top + padding - top
+        const progress = clamp(-start / distance) * steps.length
+        index = Math.min(steps.length - 1, Math.floor(progress))
+        rows.forEach((row, i) => setVar(row, '--step-progress', clamp(progress - i).toFixed(3)))
       } else {
-        // Se a lista não cabe na tela, mantém a rolagem natural.
-        let nearest = Infinity
+        // Sem travar, a linha de leitura (45% da tela) marca o passo e o progresso.
+        const line = window.innerHeight * 0.45
         rows.forEach((row, i) => {
           const rect = row.getBoundingClientRect()
-          const gap = Math.abs(rect.top + rect.height / 2 - window.innerHeight * 0.45)
-          if (gap < nearest) { nearest = gap; index = i }
+          if (rect.top <= line) index = i
+          setVar(row, '--step-progress', clamp((line - rect.top) / rect.height).toFixed(3))
         })
       }
-      highlight(index)
+      highlight(index, force)
     }
     const measure = () => {
-      pinned = !reduced.matches && content.offsetHeight <= window.innerHeight - top - 24
+      measureFrame = 0
+      // Medido sem arredondar e pelo bloco inteiro do texto, para dar o mesmo
+      // resultado com os passos parados ou no meio da animação de abrir/fechar.
+      base = rows.map((row, i) => row.getBoundingClientRect().height - texts[i].getBoundingClientRect().height)
+      text = texts.map(el => el.firstElementChild!.scrollHeight)
+      const header = layout.getBoundingClientRect().top - content.getBoundingClientRect().top
+      const room = window.innerHeight - top - bottom - header
+      const chrome = visual.offsetHeight - art.clientHeight
+      const { width, height } = art.viewBox.baseVal
+      const natural = art.clientWidth * (height / width)
+      const full = sum(base) + sum(text)
+      const folded = sum(base) + Math.max(...text)
+      // Trava sempre que cabe; se a lista inteira não couber, só o passo ativo mostra o texto.
+      pinned = !reduced.matches && wide.matches && folded <= room && room - chrome >= 200
+      compact = pinned && full > room
+      const artHeight = pinned ? Math.min(natural, room - chrome) : natural
       distance = pinned ? Math.max(180, window.innerHeight * 0.35) * steps.length : 0
+      padding = parseFloat(getComputedStyle(section).paddingTop)
       section.classList.toggle('process-pinned', pinned)
-      section.style.setProperty('--process-travel', `${distance}px`)
-      section.style.setProperty('--process-content-height', `${content.offsetHeight}px`)
-      update()
+      section.classList.toggle('process-compact', compact)
+      setVar(section, '--process-top', `${top}px`)
+      setVar(section, '--process-travel', `${distance}px`)
+      setVar(section, '--process-content-height', `${Math.ceil(header + Math.max(compact ? folded : full, chrome + artHeight))}px`)
+      setVar(section, '--process-art-max', pinned ? `${Math.floor(artHeight)}px` : 'none')
+      update(true)
     }
-    const scroll = () => { if (!frame) frame = requestAnimationFrame(update) }
-    const observer = new ResizeObserver(measure)
+    const scroll = () => { if (!frame) frame = requestAnimationFrame(() => update()) }
+    const remeasure = () => { if (!measureFrame) measureFrame = requestAnimationFrame(measure) }
+    const observer = new ResizeObserver(remeasure)
     observer.observe(content)
     window.addEventListener('scroll', scroll, { passive: true })
-    window.addEventListener('resize', measure)
-    reduced.addEventListener('change', measure)
+    window.addEventListener('resize', remeasure)
+    reduced.addEventListener('change', remeasure)
     measure()
     return () => {
       cancelAnimationFrame(frame)
+      cancelAnimationFrame(measureFrame)
       observer.disconnect()
       window.removeEventListener('scroll', scroll)
-      window.removeEventListener('resize', measure)
-      reduced.removeEventListener('change', measure)
-      section.classList.remove('process-pinned')
-      section.style.removeProperty('--process-travel')
-      section.style.removeProperty('--process-content-height')
+      window.removeEventListener('resize', remeasure)
+      reduced.removeEventListener('change', remeasure)
+      section.classList.remove('process-pinned', 'process-compact')
+      for (const name of ['--process-top', '--process-travel', '--process-content-height', '--process-art-max']) {
+        section.style.removeProperty(name)
+      }
     }
   }, [])
   return (
@@ -105,7 +151,7 @@ export function Process() {
             <span className="num">{step.num}</span>
             <div className="process-step-body">
               <h3>{step.title}</h3>
-              <p>{step.text}</p>
+              <div className="process-step-text"><div><p>{step.text}</p></div></div>
               <div className="process-mobile-visual"><ProcessVisual active={i} /></div>
             </div>
           </li>

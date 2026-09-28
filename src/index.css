@@ -1337,7 +1337,12 @@ header.is-scrolled .nav {
 
 .process-pinned .process-content {
   position: sticky;
-  top: 96px;
+  top: var(--process-top);
+}
+
+/* A ilustração encolhe para caber na altura que sobra da tela. */
+.process-pinned .process-scene svg {
+  max-height: var(--process-art-max);
 }
 
 .process-content > h2 {
@@ -1431,16 +1436,18 @@ header.is-scrolled .nav {
   right: 0;
   height: var(--step-height, 0px);
   transform: translateY(var(--step-top, 0px));
+  /* a borda esquerda é a barra de progresso do passo (.process-step::after) */
   border: 1px solid rgba(77, 159, 255, 0.28);
-  border-left: 3px solid var(--accent);
-  border-radius: 12px;
+  border-left: none;
+  border-radius: 0 12px 12px 0;
   background: rgba(180, 205, 240, 0.065);
-  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), height 420ms ease;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), height 420ms cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
   z-index: -1;
 }
 
 .process-step {
+  position: relative;
   display: flex;
   gap: 2rem;
   align-items: baseline;
@@ -1450,6 +1457,33 @@ header.is-scrolled .nav {
 
 .process-step:first-child {
   border-top: none;
+}
+
+/* Barra de progresso: trilho apagado + preenchimento que acompanha a rolagem. */
+.process-step::before,
+.process-step::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  pointer-events: none;
+}
+
+.process-step:first-child::before,
+.process-step:first-child::after {
+  top: 0;
+}
+
+.process-step::before {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.process-step::after {
+  background: var(--accent);
+  transform: scaleY(var(--step-progress, 0));
+  transform-origin: top;
 }
 
 .process-step .num {
@@ -1466,10 +1500,30 @@ header.is-scrolled .nav {
 
 .process-step.is-active .num { opacity: 1; }
 .process-step.is-active p { color: #c6cbd3; }
-.process-step-body p { transition: color 300ms ease; }
+.process-step-body p { transition: color 300ms ease, opacity 300ms ease; }
+
+/* Em telas baixas só o passo ativo mostra o texto; os outros ficam no título. */
+.process-step-text {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.process-step-text > div {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.process-compact .process-step:not(.is-active) .process-step-text {
+  grid-template-rows: 0fr;
+}
+
+.process-compact .process-step:not(.is-active) .process-step-text p {
+  opacity: 0;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .process-steps::before, .process-step .num, .process-step-body p {
+  .process-steps::before, .process-step .num, .process-step-body p, .process-step-text {
     transition: none;
   }
 }
@@ -1478,13 +1532,16 @@ header.is-scrolled .nav {
   font-size: 1.2rem;
   font-weight: 600;
   line-height: 1.2;
-  margin-bottom: 0.6rem;
 }
 
 .process-step-body p {
   color: var(--muted);
   font-size: 1rem;
   max-width: 52ch;
+}
+
+.process-step-text p {
+  padding-top: 0.6rem;
 }
 
 /* ===== Contato ===== */
