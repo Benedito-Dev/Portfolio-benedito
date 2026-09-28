@@ -1404,7 +1404,7 @@ header.is-scrolled .nav {
 }
 
 .process-scene svg { display: block; width: 100%; height: auto; }
-.process-scene-title { text-align: center; font-size: 1.1rem; font-weight: 600; }
+.process-scene-title { text-align: center; font-size: 1.1rem; font-weight: 600; margin-top: 0.5rem; }
 .process-scene-caption { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem; }
 .process-visual figcaption { margin-top: 1.6rem; text-align: center; color: var(--muted); font-size: 0.7rem; }
 
@@ -1412,7 +1412,9 @@ header.is-scrolled .nav {
   .process-layout { display: block; }
   .process-desktop-visual { display: none; }
   .process-mobile-visual { display: block; margin-top: 1.3rem; }
-  .process-mobile-visual .process-visual { max-width: 480px; }
+  .process-mobile-visual .process-visual { max-width: 480px; padding-inline: 0.4rem; }
+  .process-mobile-visual .process-scene-title,
+  .process-mobile-visual .process-scene-caption { padding-inline: 0.8rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1499,7 +1501,8 @@ header.is-scrolled .nav {
 }
 
 .process-step.is-active .num { opacity: 1; }
-.process-step.is-active p { color: #c6cbd3; }
+.process-step:not(.is-active):hover .num { opacity: 0.8; }
+.process-step.is-active .process-step-text p { color: #c6cbd3; }
 .process-step-body p { transition: color 300ms ease, opacity 300ms ease; }
 
 /* Em telas baixas só o passo ativo mostra o texto; os outros ficam no título. */
@@ -1542,6 +1545,52 @@ header.is-scrolled .nav {
 
 .process-step-text p {
   padding-top: 0.6rem;
+}
+
+/* O passo inteiro é clicável; o botão no título garante o acesso pelo teclado. */
+.process-step {
+  cursor: pointer;
+}
+
+.process-step-button {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.process-step-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* No celular o desenho vai para uma linha própria, abaixo do texto. */
+@media (max-width: 1100px) {
+  .process-step {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  .process-mobile-visual {
+    grid-column: 2;
+  }
+}
+
+/* Em tela estreita ele usa a largura toda do passo, e não só a coluna do texto. */
+@media (max-width: 600px) {
+  .process-step {
+    padding-inline: 1rem;
+  }
+
+  .process-mobile-visual {
+    grid-column: 1 / -1;
+  }
 }
 
 /* ===== Contato ===== */
@@ -1729,7 +1778,7 @@ footer {
   }
 
   .process-step {
-    gap: 1.2rem;
+    column-gap: 1.2rem;
   }
 
   .process-step .num {

@@ -34,6 +34,7 @@ export function Process() {
   const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLOListElement>(null)
+  const goTo = useRef<(index: number) => void>(() => {})
   const [active, setActive] = useState(0)
 
   useEffect(() => {
@@ -50,6 +51,7 @@ export function Process() {
     const wide = window.matchMedia('(min-width: 1101px)')
     const top = 84 // logo abaixo da navbar compacta (64px)
     const bottom = 16
+    const reading = 0.45 // sem travar, a linha de leitura fica a 45% da tela
     let frame = 0
     let measureFrame = 0
     let pinned = false
@@ -80,8 +82,8 @@ export function Process() {
         index = Math.min(steps.length - 1, Math.floor(progress))
         rows.forEach((row, i) => setVar(row, '--step-progress', clamp(progress - i).toFixed(3)))
       } else {
-        // Sem travar, a linha de leitura (45% da tela) marca o passo e o progresso.
-        const line = window.innerHeight * 0.45
+        // Sem travar, a linha de leitura marca o passo e o progresso.
+        const line = window.innerHeight * reading
         rows.forEach((row, i) => {
           const rect = row.getBoundingClientRect()
           if (rect.top <= line) index = i
@@ -117,6 +119,20 @@ export function Process() {
       setVar(section, '--process-art-max', pinned ? `${Math.floor(artHeight)}px` : 'none')
       update(true)
     }
+    goTo.current = (index: number) => {
+      if (index === current) return
+      let y
+      if (pinned) {
+        // Um pouco depois do início do passo, para ele já estar ativo quando a rolagem parar.
+        y = section.getBoundingClientRect().top + window.scrollY + padding - top + distance * (index + 0.1) / steps.length
+      } else {
+        // O passo o mais alto possível, mas ainda cruzando a linha de leitura.
+        const rect = rows[index].getBoundingClientRect()
+        const line = window.innerHeight * reading
+        y = window.scrollY + rect.top - Math.min(line - 24, Math.max(top, line - rect.height + 24))
+      }
+      window.scrollTo({ top: y, behavior: reduced.matches ? 'auto' : 'smooth' })
+    }
     const scroll = () => { if (!frame) frame = requestAnimationFrame(() => update()) }
     const remeasure = () => { if (!measureFrame) measureFrame = requestAnimationFrame(measure) }
     const observer = new ResizeObserver(remeasure)
@@ -147,13 +163,22 @@ export function Process() {
       <div className="process-layout">
       <ol ref={listRef} className="process-steps">
         {steps.map((step, i) => (
-          <li className={`process-step${active === i ? ' is-active' : ''}`} aria-current={active === i ? 'step' : undefined} key={step.num}>
+          <li
+            className={`process-step${active === i ? ' is-active' : ''}`}
+            aria-current={active === i ? 'step' : undefined}
+            key={step.num}
+            onClick={event => {
+              // Não troca de passo quando a pessoa só estava selecionando o texto.
+              const selecting = window.getSelection()?.isCollapsed === false && !(event.target as Element).closest('button')
+              if (!selecting) goTo.current(i)
+            }}
+          >
             <span className="num">{step.num}</span>
             <div className="process-step-body">
-              <h3>{step.title}</h3>
+              <h3><button type="button" className="process-step-button">{step.title}</button></h3>
               <div className="process-step-text"><div><p>{step.text}</p></div></div>
-              <div className="process-mobile-visual"><ProcessVisual active={i} /></div>
             </div>
+            <div className="process-mobile-visual"><ProcessVisual active={i} variant="mobile" /></div>
           </li>
         ))}
       </ol>
