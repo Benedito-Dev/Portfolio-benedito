@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 const SECTIONS = [
   { id: 'sobre', label: 'Sobre' },
   { id: 'trajetoria', label: 'Trajetória' },
+  { id: 'processo', label: 'Com IA' },
   { id: 'stack', label: 'Stack' },
   { id: 'projetos', label: 'Projetos' },
-  { id: 'processo', label: 'Processo' },
 ] as const
 
 export function Navbar() {

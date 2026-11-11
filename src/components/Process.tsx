@@ -4,23 +4,23 @@ import { ProcessVisual } from './ProcessVisual'
 const steps = [
   {
     num: '01',
-    title: 'Entender o problema primeiro',
-    text: 'Antes de escrever código, tento entender quem vai usar aquilo e o que realmente precisa acontecer. Construir para pessoas, não para o meu ego de dev.',
+    title: 'Plano antes do código',
+    text: 'O estrategista lê o código, compara ao menos duas abordagens e escreve o plano. Nada é implementado sem eu aprovar.',
   },
   {
     num: '02',
-    title: 'Desenhar antes de sair codando',
-    text: 'Penso nas telas, no modelo de dados e nas fronteiras do sistema antes dos detalhes. É mais barato mudar um esboço do que refatorar depois.',
+    title: 'Implementação com guarda-corpos',
+    text: 'O implementador segue as skills do projeto, e hooks validam cada edição: lint, checagens e bloqueio de comandos perigosos.',
   },
   {
     num: '03',
-    title: 'Construir de forma que dê pra manter',
-    text: 'Código tipado, organizado e legível. Prefiro uma solução simples que a próxima pessoa entende a uma esperta que só eu decifro.',
+    title: 'Revisão com nota e decisão',
+    text: 'Um revisor separado, em outro modelo, dá nota e decide: aprovado ou volta. Quem escreve o código não é quem aprova.',
   },
   {
     num: '04',
-    title: 'Cuidar dos detalhes que importam',
-    text: 'Estados vazios, mensagens de erro, o que acontece quando algo dá errado. É o que separa um trabalho de faculdade de algo pronto pra usar.',
+    title: 'Registro e deploy com aval',
+    text: 'O documentador faz commit, changelog e fecha a tarefa no board. Produção só recebe depois do meu "pode subir".',
   },
 ]
 
@@ -95,8 +95,17 @@ export function Process() {
   return (
     <section ref={sectionRef} id="processo" className="container process">
       <div ref={contentRef} className="process-content">
-      <span className="section-label">Como eu trabalho</span>
-      <h2>Quatro passos que sigo em cada projeto.</h2>
+      <div className="process-head">
+        <div>
+          <span className="section-label">Como eu trabalho com IA</span>
+          <h2>Agentes fazem o trabalho pesado. As decisões continuam comigo.</h2>
+        </div>
+        <p>
+          No dia a dia, cada tarefa passa por um time de agentes do Claude Code,
+          cada um com um papel. Eu fico nos portões: aprovo o plano, homologo e
+          autorizo o deploy.
+        </p>
+      </div>
 
       <div className="process-layout">
       <ol ref={listRef} className="process-steps">

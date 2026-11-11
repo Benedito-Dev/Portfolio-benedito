@@ -1619,12 +1619,36 @@ header.is-scrolled .nav {
   top: 96px;
 }
 
-.process-content > h2 {
-  font-size: clamp(2rem, 3.6vw, 3rem);
+.process-head {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 3rem;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+
+.process-head h2 {
+  font-size: clamp(1.9rem, 3vw, 2.6rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.08;
-  margin-bottom: 2rem;
+}
+
+.process-head .section-label {
+  margin-bottom: 1.2rem;
+}
+
+.process-head p {
+  color: var(--muted);
+  font-size: 1.02rem;
+  max-width: 30rem;
+}
+
+@media (max-width: 900px) {
+  .process-head {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
 }
 
 .process-layout {
@@ -1677,10 +1701,269 @@ header.is-scrolled .nav {
   transform: none;
 }
 
-.process-scene svg { display: block; width: 100%; height: auto; }
-.process-scene-title { text-align: center; font-size: 1.1rem; font-weight: 600; }
-.process-scene-caption { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem; }
 .process-visual figcaption { margin-top: 1.6rem; text-align: center; color: var(--muted); font-size: 0.7rem; }
+
+/* ===== Pipeline de agentes (visual do processo) ===== */
+.ai-pipeline {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 1.4rem 0.6rem 1.2rem;
+  position: relative;
+}
+
+/* trilho entre os nós */
+.ai-pipeline::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 2px;
+  background: var(--border);
+}
+
+.ai-node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.ai-node-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: #171d25;
+  border: 1px solid #354253;
+  transition: all 0.35s ease;
+}
+
+.ai-node-dot svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ai-node-name {
+  font-size: 0.72rem;
+  color: var(--muted);
+  transition: color 0.35s ease;
+}
+
+.ai-node.is-done .ai-node-dot {
+  color: var(--accent);
+  border-color: var(--border-neon);
+  background: #14243a;
+}
+
+.ai-node.is-active .ai-node-dot {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 5px var(--accent-soft), 0 0 20px var(--accent-glow);
+}
+
+.ai-node.is-active .ai-node-name {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.ai-artifact {
+  margin: 0 0.4rem;
+  padding: 1.1rem 1.2rem;
+  min-height: 236px;
+  border-radius: 12px;
+  border: 1px solid #2b3747;
+  background: #11161d;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: #cfd8e3;
+}
+
+/* no celular o visual fica dentro do passo: não herdar o estilo de .process-step-body p */
+.process-visual .ai-artifact p {
+  font-size: inherit;
+  max-width: none;
+}
+
+.process-visual .ai-artifact p:not([class]) {
+  color: inherit;
+}
+
+.ai-artifact p + p {
+  margin-top: 0.3rem;
+}
+
+.ai-file {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+  padding-bottom: 0.7rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #222c38;
+}
+
+.ai-h {
+  color: #82baff;
+  font-weight: 600;
+  margin-top: 0.7rem;
+}
+
+.ai-h:first-child {
+  margin-top: 0;
+}
+
+.ai-tag {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 0.45rem;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--muted);
+  border: 1px solid #354253;
+}
+
+.ai-tag.is-on {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* prefixadas com .ai-artifact para vencer .process-step-body p no celular */
+.ai-artifact .ai-accent { color: var(--accent); }
+.ai-artifact .ai-dim { color: var(--muted); }
+.ai-artifact .ai-ok { color: #5fd39a; }
+.ai-artifact .ai-bad { color: #f08a8a; }
+.ai-artifact .ai-warn { color: #e8c170; }
+
+.ai-terminal {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+}
+
+.ai-gate {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 1rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #e8c170;
+  background: rgba(232, 193, 112, 0.08);
+  border: 1px solid rgba(232, 193, 112, 0.25);
+}
+
+.ai-gate.is-ok {
+  color: #5fd39a;
+  background: rgba(95, 211, 154, 0.08);
+  border-color: rgba(95, 211, 154, 0.25);
+}
+
+.ai-gate svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ai-score {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+.ai-score-num {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.ai-score-num small {
+  font-size: 1rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.ai-decision {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #5fd39a;
+  background: rgba(95, 211, 154, 0.12);
+  border: 1px solid rgba(95, 211, 154, 0.3);
+}
+
+.ai-commit {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+  padding: 0.8rem 0.9rem;
+  border-radius: 8px;
+  background: #0c1016;
+  border: 1px solid #222c38;
+}
+
+.ai-board {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  font-size: 0.78rem;
+}
+
+.ai-col {
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  border: 1px solid #354253;
+}
+
+.ai-col.is-done {
+  color: #5fd39a;
+  border-color: rgba(95, 211, 154, 0.35);
+}
+
+.ai-arrow { color: var(--muted); }
+
+@media (max-width: 480px) {
+  .process-step { flex-direction: column; gap: 0.4rem; padding-inline: 1rem; }
+  .process-visual { padding: 1rem 0.8rem 0.8rem; }
+  .process-visual-heading { padding-inline: 0.2rem; }
+  .ai-pipeline { margin-inline: 0; }
+  /* 4 nomes não cabem lado a lado: só o agente da vez aparece */
+  .ai-node:not(.is-active) .ai-node-name { visibility: hidden; }
+  .ai-node-name { white-space: nowrap; }
+  .ai-artifact { margin: 0; padding: 1rem; min-height: 0; font-size: 0.8rem; }
+  .ai-terminal, .ai-commit { font-size: 0.68rem; }
+  .ai-file { font-size: 0.64rem; }
+}
 
 @media (max-width: 1100px) {
   .process-layout { display: block; }
@@ -1723,7 +2006,7 @@ header.is-scrolled .nav {
   display: flex;
   gap: 2rem;
   align-items: baseline;
-  padding: 1.2rem 1.4rem;
+  padding: 1rem 1.4rem;
   border-top: 1px solid var(--border);
 }
 
