@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { profile } from '../data/profile'
-import { experiences } from '../data/experience'
+import { journey } from '../data/experience'
 import { stackColumns } from '../data/stack'
 import { cases } from '../data/projects'
 
@@ -21,11 +21,7 @@ const COMMANDS: Record<string, string[]> = {
     'Técnico em ADS (SENAC), graduando em Engenharia de Software.',
     'Curioso o suficiente pra abrir um terminal escondido num portfólio.',
   ],
-  experiencia: experiences.flatMap((e) => [
-    `${e.company} · ${e.role} · ${e.period}`,
-    `${e.product.name}: ${e.product.description}`,
-    `site: ${e.product.url}`,
-  ]),
+  trajetoria: journey.map((j) => `${j.period} · ${j.title} — ${j.subtitle}`),
   stack: stackColumns.map((col) => `${col.title}: ${col.items.join(' · ')}`),
   projetos: cases.flatMap((c) => [
     `${c.title.split(' — ')[0]} — ${c.summary}`,
@@ -43,7 +39,7 @@ const HELP_LINES = [
   'Comandos disponíveis:',
   '  help       — mostra esta lista',
   '  whoami     — quem sou eu',
-  '  experiencia — onde trabalho',
+  '  trajetoria — formação e experiência',
   '  stack      — tecnologias que uso',
   '  projetos   — projetos em destaque',
   '  contato    — como falar comigo',

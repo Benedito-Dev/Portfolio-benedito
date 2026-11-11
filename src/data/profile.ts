@@ -14,7 +14,7 @@ export type HeroStat = { num: string; label: string }
 
 /** Números do hero. Atualizar quando mudarem de verdade. */
 export const heroStats: HeroStat[] = [
-  { num: '1.300+', label: 'Commits no Rizar' },
-  { num: '10', label: 'Agentes de IA no meu fluxo' },
+  { num: '1.300+', label: 'Commits em produção' },
   { num: '3', label: 'Servidores MCP' },
+  { num: '2', label: 'Produtos próprios no ar' },
 ]

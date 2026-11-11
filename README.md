@@ -25,14 +25,14 @@ src/
 ├── App.tsx                 # composição das seções
 ├── main.tsx                # entrypoint
 ├── index.css               # design tokens + estilos
-├── data/                   # conteúdo do site (perfil, experiência, projetos, stack)
+├── data/                   # conteúdo do site (perfil, trajetória, projetos, stack)
 ├── hooks/
 │   └── useScrollFX.ts       # reveal-on-scroll + parallax
 └── components/
     ├── Navbar.tsx
     ├── Hero.tsx             # abertura em camadas
     ├── About.tsx
-    ├── Experience.tsx       # experiência profissional
+    ├── Experience.tsx       # trajetória (linha do tempo)
     ├── AboutVisual.tsx      # vídeo + balão de pensamento
     ├── Stack.tsx
     ├── Projects.tsx         # case study (Prumo — gestão para depósitos)
