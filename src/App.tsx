@@ -8,6 +8,7 @@ import { Process } from './components/Process'
 import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
 import { DevTerminal } from './components/DevTerminal'
+import { MobileCTA } from './components/MobileCTA'
 import { IntroSplash } from './components/IntroSplash'
 import { useScrollFX } from './hooks/useScrollFX'
 
@@ -35,6 +36,7 @@ export default function App() {
 
       <Footer />
       <DevTerminal />
+      <MobileCTA />
     </>
   )
 }

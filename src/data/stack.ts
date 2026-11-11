@@ -16,3 +16,9 @@ export const stackColumns: StackColumn[] = [
   { title: 'IA', icon: 'ai', items: ['Claude Code', 'Anthropic SDK', 'MCP', 'Agentes de IA'] },
   { title: 'Ferramentas', icon: 'tools', items: ['Git', 'Docker', 'Vercel', 'Tauri', 'Swagger'] },
 ]
+
+/** Versão do celular: as tecnologias principais numa nuvem só, sem categorias. */
+export const stackHighlights: string[] = [
+  'TypeScript', 'Python', 'React', 'React Native', 'Next.js', 'Node.js', 'NestJS',
+  'Django', 'PostgreSQL', 'Prisma', 'Docker', 'Claude Code', 'Anthropic SDK', 'MCP',
+]

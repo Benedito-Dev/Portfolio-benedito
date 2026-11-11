@@ -31,7 +31,9 @@ function CaseStudy({ data }: { data: CaseData }) {
           <p>{data.problema}</p>
         </div>
 
-        <div className="case-block">
+        <p className="case-pitch">{data.pitch}</p>
+
+        <div className="case-block case-extra">
           <div className="lbl">Solução</div>
           <p>{data.solucao}</p>
         </div>
@@ -52,7 +54,7 @@ function CaseStudy({ data }: { data: CaseData }) {
 
         {!expanded && (
           <button type="button" className="read-more" onClick={() => setExpanded(true)}>
-            Problema, funcionalidades e impacto
+            Ver detalhes do projeto
           </button>
         )}
 

@@ -6,6 +6,8 @@ export type CaseData = {
   title: string
   /** resumo de uma linha, usado no terminal escondido */
   summary: string
+  /** frase de apresentação do case no celular (no lugar da Solução) */
+  pitch: string
   reverse?: boolean
   visual: CaseVisualKey
   problema: string
@@ -24,6 +26,7 @@ export const cases: CaseData[] = [
     idx: '01',
     title: 'Prumo — Gestão para depósitos',
     summary: 'gestão para depósitos de materiais de construção (React + Node.js + PostgreSQL)',
+    pitch: 'Vendas, fiado e indicadores para depósitos de material de construção, no celular e no desktop, com um assistente de IA.',
     visual: 'prumo',
     problema:
       'No ritmo do balcão, registrar vendas em cadernos dificulta acompanhar o faturamento, saber quem está devendo e entender quais produtos mais saem.',
@@ -46,6 +49,7 @@ export const cases: CaseData[] = [
     idx: '02',
     title: 'Meu Bolso — Finanças com o Claude como interface',
     summary: 'painel de finanças pessoais que o Claude opera via MCP (React + Node.js + PostgreSQL)',
+    pitch: 'App de finanças pessoais em que o Claude é a interface principal: lança gastos e consulta o mês pelo servidor MCP.',
     reverse: true,
     visual: 'meubolso',
     problema:

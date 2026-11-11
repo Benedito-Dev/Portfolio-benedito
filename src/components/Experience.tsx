@@ -120,7 +120,10 @@ function CurrentItem({ item }: { item: JourneyItem }) {
   return (
     <>
       <Meta item={item} />
-      {item.description && <p className="journey-desc">{item.description}</p>}
+      {item.description && (
+        <p className={`journey-desc${item.descriptionShort ? ' desc-full' : ''}`}>{item.description}</p>
+      )}
+      {item.descriptionShort && <p className="journey-desc desc-short">{item.descriptionShort}</p>}
       {item.highlights && (
         <ul className="journey-highlights">
           {item.highlights.map((h) => (

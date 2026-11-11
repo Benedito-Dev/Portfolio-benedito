@@ -11,6 +11,8 @@ export type JourneyItem = {
   current?: boolean
   link?: { label: string; url: string }
   description?: string
+  /** versão de uma frase da descrição, usada no celular */
+  descriptionShort?: string
   highlights?: Highlight[]
   tags?: string[]
   /** selo curto ao lado do período, ex.: "Concluído", "Tech lead" */
@@ -31,6 +33,7 @@ export const journey: JourneyItem[] = [
     link: { label: 'Rizar', url: 'https://rizar.com.br' },
     description:
       'Construo o Rizar, plataforma SaaS de inteligência de marketing: do público-alvo ao criativo gerado por IA, à campanha de tráfego e à conversa com o lead depois do clique. Comecei no Mutase, produto que deu origem ao Rizar.',
+    descriptionShort: 'Construo o Rizar, plataforma SaaS de inteligência de marketing, do banco à interface.',
     highlights: [
       {
         title: 'Servidor MCP',

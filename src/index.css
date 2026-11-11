@@ -2623,7 +2623,11 @@ footer {
 /* botão "ler mais" e pontos do carrossel: existem só no celular */
 .read-more,
 .carousel-dots,
-.ai-compact { display: none; }
+.ai-compact,
+.stack-cloud,
+.desc-short,
+.case-pitch,
+.mobile-cta { display: none; }
 
 @media (max-width: 1100px) {
   /* ---- Com IA: passos em carrossel, um cartão por vez ---- */
@@ -2845,5 +2849,149 @@ footer {
 
   .footer-brand { flex-wrap: wrap; justify-content: center; text-align: center; }
   .footer-brand .role { flex-basis: 100%; }
+}
+
+/* =====================================================================
+   Celular, rodada 2: "currículo navegável" para quem tem 30 segundos.
+   ===================================================================== */
+@media (max-width: 720px) {
+  /* Sobre: título + um parágrafo; vídeo e fecho só em "ler mais" */
+  .about-heading .about-visual { display: none; }
+  .about:not(.is-expanded) .about-text p.emphasis { display: none; }
+  .about .read-more { margin-bottom: 0; }
+
+  /* o título de cada seção já diz o essencial */
+  .experience-head > p,
+  .process-head > p,
+  .stack-head > p,
+  .projects-head > p { display: none; }
+
+  /* Stack: nuvem com as principais */
+  .stack-grid { display: none; }
+
+  .stack-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+  }
+
+  .stack-cloud li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--card);
+    font-size: 0.85rem;
+    color: #d4d4d4;
+  }
+
+  /* Trajetória: Devari em uma frase; itens antigos em linha compacta */
+  .desc-full { display: none; }
+  .desc-short { display: block; }
+  .journey-item.is-current .case-tags { display: none; }
+  .journey-item:not(.is-current) .journey-desc,
+  .journey-item:not(.is-current) .journey-progress { display: none; }
+  .journey-card-body { padding: 1rem 1.1rem; }
+  .journey-item:not(.is-current) .journey-meta h3 { font-size: 1.05rem; }
+  .journey-item:not(.is-current) .journey-subtitle { font-size: 0.9rem; }
+  .journey-item:not(.is-current) { padding-bottom: 1rem; }
+  .journey-highlights { margin-top: 1.2rem; }
+
+  /* Cases: frase de apresentação no lugar da Solução */
+  .case-pitch {
+    display: block;
+    color: #d4d4d4;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  /* barra de contato fixa */
+  .mobile-cta {
+    display: flex;
+    gap: 0.6rem;
+    position: fixed;
+    z-index: 90;
+    left: 1rem;
+    right: 1rem;
+    bottom: calc(0.9rem + env(safe-area-inset-bottom));
+    padding: 0.45rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-neon);
+    background: rgba(22, 24, 28, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.8);
+    transform: translateY(calc(100% + 2rem));
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+  }
+
+  .mobile-cta.is-visible {
+    transform: none;
+    opacity: 1;
+  }
+
+  .mobile-cta a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 44px;
+    border-radius: 999px;
+    color: var(--fg);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .mobile-cta a svg { width: 18px; height: 18px; }
+
+  .mobile-cta-primary {
+    flex: 1;
+    background: var(--fg);
+    color: #111 !important;
+  }
+
+  .mobile-cta a:not(.mobile-cta-primary) {
+    width: 44px;
+    border: 1px solid var(--border);
+  }
+
+  /* o fim da página não fica escondido atrás da barra */
+  footer { padding-bottom: 5rem; }
+}
+
+@media (max-width: 720px) {
+  /* cases: 4 tags bastam (a Stack já lista tudo); legenda do mockup sai */
+  .case .case-tags span:nth-child(n + 5) { display: none; }
+  .case .case-tags { margin: 1.2rem 0 1.2rem; }
+  .device-preview figcaption { display: none; }
+  .case-visual { aspect-ratio: auto; padding: 1rem 0.4rem; }
+  .case + .case { margin-top: 3rem; }
+
+  /* laboratório: texto em 4 linhas, sem tags */
+  .lab-card > p {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .lab-card .case-tags { display: none; }
+  .lab-card > p { margin-bottom: 1.2rem; }
+  .lab-card { padding: 1.3rem; }
+
+  /* Com IA: o nome do arquivo no topo do artefato é detalhe */
+  .ai-compact .ai-file { display: none; }
+}
+
+@media (max-width: 480px) {
+  :root { --section-pad: 2.6rem; }
+}
+
+@media (max-width: 720px) and (prefers-reduced-motion: reduce) {
+  .mobile-cta { transition: none; }
 }
 

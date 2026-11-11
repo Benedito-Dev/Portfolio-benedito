@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { techLogos } from './techLogos'
-import { stackColumns, type StackIconKey } from '../data/stack'
+import { stackColumns, stackHighlights, type StackIconKey } from '../data/stack'
 
 const svgProps = {
   viewBox: '0 0 24 24',
@@ -63,6 +63,16 @@ export function Stack() {
           NestJS e ao Python dos meus projetos, com IA atravessando tudo.
         </p>
       </div>
+
+      {/* celular: só as principais, numa nuvem */}
+      <ul className="stack-cloud reveal">
+        {stackHighlights.map((item) => (
+          <li key={item}>
+            <span className="tech-logo" aria-hidden="true">{techLogos[item]}</span>
+            {item}
+          </li>
+        ))}
+      </ul>
 
       <div className="stack-grid reveal">
         {stackColumns.map((col) => (
