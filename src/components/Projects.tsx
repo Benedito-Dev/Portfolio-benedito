@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react'
-import { PrumoVisual } from './CaseVisuals'
+import { MeuBolsoVisual, PrumoVisual } from './CaseVisuals'
 import { GithubIcon } from './icons'
-import { cases, type CaseData, type CaseVisualKey } from '../data/projects'
+import { cases, labProjects, type CaseData, type CaseVisualKey } from '../data/projects'
 
 const visuals: Record<CaseVisualKey, ReactNode> = {
   prumo: <PrumoVisual />,
+  meubolso: <MeuBolsoVisual />,
 }
 
 function CaseStudy({ data }: { data: CaseData }) {
@@ -63,9 +64,44 @@ function CaseStudy({ data }: { data: CaseData }) {
               GitHub
             </a>
           )}
+          {data.privateNote && <span className="case-private">{data.privateNote}</span>}
         </div>
       </div>
     </article>
+  )
+}
+
+function Lab() {
+  return (
+    <div className="lab">
+      <div className="lab-head reveal">
+        <span className="section-label">Laboratório</span>
+        <h3>Onde eu testo ideias com agentes, MCP e automação.</h3>
+      </div>
+      <div className="lab-grid">
+        {labProjects.map((p, i) => (
+          <article className="lab-card reveal" data-delay={String(i + 1)} key={p.name}>
+            <div className="lab-card-top">
+              <h4>{p.name}</h4>
+              <span className="lab-status">{p.status}</span>
+            </div>
+            <p>{p.text}</p>
+            <div className="case-tags">
+              {p.tags.map((t) => (
+                <span key={t}>{t}</span>
+              ))}
+            </div>
+            {p.github ? (
+              <a className="lab-link" href={p.github} target="_blank" rel="noreferrer">
+                <GithubIcon /> Ver no GitHub
+              </a>
+            ) : (
+              <span className="lab-link is-private">Repositório privado</span>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -74,19 +110,20 @@ export function Projects() {
     <section id="projetos" className="container projects">
       <div className="projects-head reveal">
         <div>
-          <span className="section-label">Projeto em Destaque</span>
-          <h2>Um projeto real no ar, contado por inteiro.</h2>
+          <span className="section-label">Projetos</span>
+          <h2>Produtos que eu construo, coloco no ar e uso de verdade.</h2>
         </div>
         <p>
-          Prefiro mostrar um produto que existe, com código aberto e
-          demo funcionando, a listar dezenas de ideias pela metade. Novos
-          projetos estão a caminho.
+          Dois estudos de caso contados por inteiro e um laboratório onde
+          experimento agentes, MCP e automação fora do trabalho.
         </p>
       </div>
 
       {cases.map((data) => (
         <CaseStudy data={data} key={data.idx} />
       ))}
+
+      <Lab />
     </section>
   )
 }

@@ -24,10 +24,10 @@ const icons: Record<StackIconKey, ReactNode> = {
       <polyline points="8 6 2 12 8 18" />
     </svg>
   ),
-  mobile: (
+  ai: (
     <svg {...svgProps}>
-      <rect x="7" y="2" width="10" height="20" rx="2" ry="2" />
-      <line x1="11" y1="18" x2="13" y2="18" />
+      <path d="M12 3l1.8 4.6L18.5 9.4l-4.7 1.8L12 16l-1.8-4.8L5.5 9.4l4.7-1.8L12 3z" />
+      <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z" />
     </svg>
   ),
   backend: (
@@ -59,8 +59,8 @@ export function Stack() {
           <h2>As ferramentas em que confio para construir software em produção.</h2>
         </div>
         <p>
-          Escolhidas por confiabilidade, não por hype. São as ferramentas
-          que uso no dia a dia e que sustentam os projetos que coloco no ar.
+          Escolhidas por confiabilidade, não por hype. Do Django do trabalho ao
+          NestJS e ao Python dos meus projetos, com IA atravessando tudo.
         </p>
       </div>
 

@@ -1354,94 +1354,94 @@ header.is-scrolled .nav {
   order: 1;
 }
 
-.prumo-preview {
+.device-preview {
   width: 96%;
   margin: 0;
 }
 
-.prumo-stage {
+.device-stage {
   position: relative;
   aspect-ratio: 9 / 7;
   perspective: 1000px;
-  --prumo-x: 0;
-  --prumo-y: 0;
+  --device-x: 0;
+  --device-y: 0;
 }
 
-.prumo-device {
+.device-frame {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-.prumo-tilt {
+.device-tilt {
   width: 100%;
   height: 100%;
   transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.prumo-monitor, .prumo-monitor .prumo-tilt {
+.device-monitor, .device-monitor .device-tilt {
   transform-origin: 47% 45%;
 }
 
-.prumo-phone, .prumo-phone .prumo-tilt {
+.device-phone, .device-phone .device-tilt {
   transform-origin: 80% 64%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .prumo-pending:not(.prumo-entered) .prumo-device {
+  .device-pending:not(.device-entered) .device-frame {
     opacity: 0;
   }
 
-  .prumo-pending.prumo-entered .prumo-monitor {
-    animation: prumo-monitor-enter 1050ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  .device-pending.device-entered .device-monitor {
+    animation: device-monitor-enter 1050ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
-  .prumo-pending.prumo-entered .prumo-phone {
-    animation: prumo-phone-enter 1100ms 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  .device-pending.device-entered .device-phone {
+    animation: device-phone-enter 1100ms 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
-  .prumo-pending.prumo-entered .prumo-chart-line {
+  .device-pending.device-entered .device-chart-line {
     stroke-dasharray: 1;
-    animation: prumo-chart-draw 900ms 650ms ease-out both;
+    animation: device-chart-draw 900ms 650ms ease-out both;
   }
 }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .prumo-monitor .prumo-tilt {
-    transform: perspective(1000px) translate3d(calc(var(--prumo-x) * 4px), calc(var(--prumo-y) * 3px), 0) rotateX(calc(var(--prumo-y) * -2deg)) rotateY(calc(var(--prumo-x) * 3deg));
+  .device-monitor .device-tilt {
+    transform: perspective(1000px) translate3d(calc(var(--device-x) * 4px), calc(var(--device-y) * 3px), 0) rotateX(calc(var(--device-y) * -2deg)) rotateY(calc(var(--device-x) * 3deg));
   }
 
-  .prumo-phone .prumo-tilt {
-    transform: perspective(1000px) translate3d(calc(var(--prumo-x) * 12px), calc(var(--prumo-y) * 9px), 0) rotateX(calc(var(--prumo-y) * -4deg)) rotateY(calc(var(--prumo-x) * 5deg));
+  .device-phone .device-tilt {
+    transform: perspective(1000px) translate3d(calc(var(--device-x) * 12px), calc(var(--device-y) * 9px), 0) rotateX(calc(var(--device-y) * -4deg)) rotateY(calc(var(--device-x) * 5deg));
   }
 }
 
-@keyframes prumo-monitor-enter {
+@keyframes device-monitor-enter {
   from { opacity: 0; transform: translate3d(-4%, 5%, -160px) rotateX(10deg) rotateY(16deg) scale(0.92); }
   to { opacity: 1; transform: none; }
 }
 
-@keyframes prumo-phone-enter {
+@keyframes device-phone-enter {
   from { opacity: 0; transform: translate3d(12%, 8%, 100px) rotateY(-24deg) rotateZ(9deg) scale(0.9); }
   to { opacity: 1; transform: none; }
 }
 
-@keyframes prumo-chart-draw {
+@keyframes device-chart-draw {
   from { stroke-dashoffset: 1; }
   to { stroke-dashoffset: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .prumo-tilt { transition: none; }
+  .device-tilt { transition: none; }
 }
 
-.prumo-preview svg {
+.device-preview svg {
   display: block;
   width: 100%;
   height: auto;
 }
 
-.prumo-preview figcaption {
+.device-preview figcaption {
   margin-top: 0;
   color: var(--muted);
   text-align: center;
@@ -1595,6 +1595,129 @@ header.is-scrolled .nav {
 
 .case-links a.muted-link:hover {
   color: var(--fg);
+}
+
+.case-private {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ===== Laboratório ===== */
+.lab {
+  margin-top: 6rem;
+}
+
+.lab-head h3 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 2.2rem;
+  max-width: 28ch;
+}
+
+.lab-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+.lab-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.6rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(77, 159, 255, 0.05), transparent 50%), var(--card);
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lab-card:hover {
+  border-color: var(--border-neon);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 50px -30px var(--accent-glow);
+}
+
+.lab-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.lab-card h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.lab-status {
+  flex-shrink: 0;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--border-neon);
+}
+
+.lab-card > p {
+  color: #b4b8c0;
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+
+.lab-card .case-tags {
+  margin: 1.2rem 0 1.4rem;
+}
+
+.lab-link {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--fg);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.lab-link:hover {
+  color: var(--accent);
+}
+
+.lab-link svg {
+  width: 16px;
+  height: 16px;
+}
+
+.lab-link.is-private {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.lab-link.is-private:hover {
+  color: var(--muted);
+}
+
+@media (max-width: 1100px) {
+  .lab-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .lab {
+    margin-top: 4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-card:hover {
+    transform: none;
+  }
 }
 
 /* ===== Processo ===== */
@@ -2232,6 +2355,11 @@ footer {
   .case {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+
+  /* no celular o visual vem sempre antes do texto, mesmo nos cases invertidos */
+  .case.reverse .case-visual {
+    order: 0;
   }
 
   .process-step {
