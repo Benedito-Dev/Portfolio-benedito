@@ -72,7 +72,7 @@ export function IntroSplash() {
     >
       <div className={`intro-code ${ready ? 'go' : ''}`}>
         <span className="intro-code-line line-1">const dev = new Benedito()</span>
-        <span className="intro-code-line line-2 comment">// ainda em beta</span>
+        <span className="intro-code-line line-2 comment">// rodando em produção</span>
       </div>
     </div>
   )

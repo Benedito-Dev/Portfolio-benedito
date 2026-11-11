@@ -1,4 +1,5 @@
 import { GithubIcon, LinkedinIcon, MailIcon } from './icons'
+import { profile } from '../data/profile'
 
 export function Contact() {
   return (
@@ -10,16 +11,16 @@ export function Contact() {
           Aberto a oportunidades e novos projetos. Manda uma mensagem contando o
           que você está construindo — respondo rápido.
         </p>
-        <a href="mailto:beneditobittencourtt@gmail.com" className="contact-email">
+        <a href={`mailto:${profile.email}`} className="contact-email">
           <MailIcon />
-          beneditobittencourtt@gmail.com
+          {profile.email}
         </a>
         <div className="contact-social">
-          <a href="https://github.com/Benedito-Dev" target="_blank" rel="noreferrer">
+          <a href={profile.github} target="_blank" rel="noreferrer">
             <GithubIcon />
             GitHub
           </a>
-          <a href="https://www.linkedin.com/in/benedito-bittencourt-13ab1b233/" target="_blank" rel="noreferrer">
+          <a href={profile.linkedin} target="_blank" rel="noreferrer">
             <LinkedinIcon />
             LinkedIn
           </a>

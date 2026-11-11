@@ -1,6 +1,7 @@
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
 import { About } from './components/About'
+import { Experience } from './components/Experience'
 import { Stack } from './components/Stack'
 import { Projects } from './components/Projects'
 import { Process } from './components/Process'
@@ -25,6 +26,7 @@ export default function App() {
       <main id="conteudo">
         <Hero />
         <About />
+        <Experience />
         <Stack />
         <Projects />
         <Process />

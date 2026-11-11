@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 /** Seções observadas pelo scroll spy, na ordem em que aparecem na página. */
 const SECTIONS = [
   { id: 'sobre', label: 'Sobre' },
+  { id: 'experiencia', label: 'Experiência' },
   { id: 'stack', label: 'Stack' },
   { id: 'projetos', label: 'Projetos' },
   { id: 'processo', label: 'Processo' },

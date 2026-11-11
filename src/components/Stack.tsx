@@ -1,11 +1,6 @@
 import type { ReactNode } from 'react'
 import { techLogos } from './techLogos'
-
-type StackItem = {
-  title: string
-  items: string[]
-  icon: ReactNode
-}
+import { stackColumns, type StackIconKey } from '../data/stack'
 
 const svgProps = {
   viewBox: '0 0 24 24',
@@ -16,68 +11,44 @@ const svgProps = {
   strokeLinejoin: 'round' as const,
 }
 
-const columns: StackItem[] = [
-  {
-    title: 'Linguagens',
-    items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C#'],
-    icon: (
-      <svg {...svgProps}>
-        <polyline points="4 17 10 11 4 5" />
-        <line x1="12" y1="19" x2="20" y2="19" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Frontend',
-    items: ['React', 'Next.js', 'Tailwind CSS'],
-    icon: (
-      <svg {...svgProps}>
-        <polyline points="16 18 22 12 16 6" />
-        <polyline points="8 6 2 12 8 18" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Mobile',
-    items: ['React Native', 'Expo'],
-    icon: (
-      <svg {...svgProps}>
-        <rect x="7" y="2" width="10" height="20" rx="2" ry="2" />
-        <line x1="11" y1="18" x2="13" y2="18" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Backend',
-    items: ['Node.js', 'Express', 'REST APIs'],
-    icon: (
-      <svg {...svgProps}>
-        <rect x="3" y="4" width="18" height="7" rx="1.5" />
-        <rect x="3" y="13" width="18" height="7" rx="1.5" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Banco de Dados',
-    items: ['PostgreSQL', 'MongoDB', 'Redis', 'Firebase'],
-    icon: (
-      <svg {...svgProps}>
-        <ellipse cx="12" cy="5" rx="9" ry="3" />
-        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Ferramentas',
-    items: ['Git', 'Docker', 'Swagger'],
-    icon: (
-      <svg {...svgProps}>
-        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-      </svg>
-    ),
-  },
-]
+const icons: Record<StackIconKey, ReactNode> = {
+  languages: (
+    <svg {...svgProps}>
+      <polyline points="4 17 10 11 4 5" />
+      <line x1="12" y1="19" x2="20" y2="19" />
+    </svg>
+  ),
+  frontend: (
+    <svg {...svgProps}>
+      <polyline points="16 18 22 12 16 6" />
+      <polyline points="8 6 2 12 8 18" />
+    </svg>
+  ),
+  mobile: (
+    <svg {...svgProps}>
+      <rect x="7" y="2" width="10" height="20" rx="2" ry="2" />
+      <line x1="11" y1="18" x2="13" y2="18" />
+    </svg>
+  ),
+  backend: (
+    <svg {...svgProps}>
+      <rect x="3" y="4" width="18" height="7" rx="1.5" />
+      <rect x="3" y="13" width="18" height="7" rx="1.5" />
+    </svg>
+  ),
+  database: (
+    <svg {...svgProps}>
+      <ellipse cx="12" cy="5" rx="9" ry="3" />
+      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+    </svg>
+  ),
+  tools: (
+    <svg {...svgProps}>
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+    </svg>
+  ),
+}
 
 export function Stack() {
   return (
@@ -94,9 +65,9 @@ export function Stack() {
       </div>
 
       <div className="stack-grid reveal">
-        {columns.map((col) => (
+        {stackColumns.map((col) => (
           <div className="stack-col" key={col.title}>
-            <span className="icon">{col.icon}</span>
+            <span className="icon">{icons[col.icon]}</span>
             <h3>{col.title}</h3>
             <ul>
               {col.items.map((item) => (

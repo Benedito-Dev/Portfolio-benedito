@@ -2,7 +2,7 @@
 
 Portfólio pessoal de desenvolvedor full stack. Uma single-page em React + TypeScript, com foco em código limpo, tipografia sóbria e interações sutis que dão vida à navegação sem competir com o conteúdo.
 
-> Web e mobile, do banco à interface.
+> Construo software com agentes de IA no dia a dia, do banco à interface.
 
 ## ✨ Destaques
 
@@ -25,12 +25,14 @@ src/
 ├── App.tsx                 # composição das seções
 ├── main.tsx                # entrypoint
 ├── index.css               # design tokens + estilos
+├── data/                   # conteúdo do site (perfil, experiência, projetos, stack)
 ├── hooks/
 │   └── useScrollFX.ts       # reveal-on-scroll + parallax
 └── components/
     ├── Navbar.tsx
     ├── Hero.tsx             # abertura em camadas
     ├── About.tsx
+    ├── Experience.tsx       # experiência profissional
     ├── AboutVisual.tsx      # vídeo + balão de pensamento
     ├── Stack.tsx
     ├── Projects.tsx         # case study (Prumo — gestão para depósitos)

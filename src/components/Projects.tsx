@@ -1,51 +1,18 @@
 import type { ReactNode } from 'react'
 import { PrumoVisual } from './CaseVisuals'
 import { GithubIcon } from './icons'
+import { cases, type CaseData, type CaseVisualKey } from '../data/projects'
 
-type CaseData = {
-  idx: string
-  title: string
-  reverse?: boolean
-  visual: ReactNode
-  problema: string
-  solucao: string
-  funcionalidades: string[]
-  impacto: string
-  tags: string[]
-  demo?: string
-  github?: string
+const visuals: Record<CaseVisualKey, ReactNode> = {
+  prumo: <PrumoVisual />,
 }
-
-const cases: CaseData[] = [
-  {
-    idx: '01',
-    title: 'Prumo — Gestão para depósitos',
-    visual: <PrumoVisual />,
-    problema:
-      'No ritmo do balcão, registrar vendas em cadernos dificulta acompanhar o faturamento, saber quem está devendo e entender quais produtos mais saem.',
-    solucao:
-      'Um sistema web para depósitos de materiais de construção, que reúne a operação de vendas e a visão do negócio em uma interface adaptada ao celular e ao desktop.',
-    funcionalidades: [
-      'Vendas com descontos, diferentes pagamentos e recibos',
-      'Controle de fiado, recebimentos parciais e cobrança por WhatsApp',
-      'Indicadores de faturamento, clientes e produtos mais vendidos',
-      'Zé: assistente de IA para consultas e operações em linguagem natural',
-      'Acessos de dono e vendedor, com permissões e auditoria',
-    ],
-    impacto:
-      'Centraliza vendas, valores a receber e indicadores para apoiar as decisões do dono. Aplicação publicada, com frontend, API própria e PostgreSQL, além de código aberto no GitHub.',
-    tags: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Tailwind CSS', 'OpenRouter'],
-    demo: 'https://prumo-omega.vercel.app/',
-    github: 'https://github.com/Benedito-Dev/Prumo',
-  },
-]
 
 function CaseStudy({ data }: { data: CaseData }) {
   const cls = ['case', 'reveal', data.reverse ? 'reverse' : ''].filter(Boolean).join(' ')
 
   return (
     <article className={cls}>
-      <div className="case-visual" data-parallax="0.05">{data.visual}</div>
+      <div className="case-visual" data-parallax="0.05">{visuals[data.visual]}</div>
 
       <div className="case-body">
         <div className="case-eyebrow">

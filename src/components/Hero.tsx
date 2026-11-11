@@ -1,33 +1,30 @@
+import { heroStats } from '../data/profile'
+
 export function Hero() {
   return (
     <section className="container hero">
       <div className="hero-text hero-anim" data-parallax="-0.04">
-        <span className="badge"><span className="dot"></span> Desenvolvedor Full Stack</span>
+        <span className="badge"><span className="dot"></span> Desenvolvedor Full Stack · Devari</span>
         <h1>
           Desenvolvedor full stack.{' '}
-          <span className="accent">Web e mobile, do banco à interface.</span>
+          <span className="accent">Construo software com agentes de IA no dia a dia.</span>
         </h1>
         <p className="lead">
-          Construo aplicações completas com foco em código limpo e em
-          coisas que funcionam de verdade em produção.
+          Trabalho no Rizar, uma plataforma SaaS de marketing da Devari, entregando
+          do banco à interface, e uso agentes do Claude Code para planejar,
+          implementar e revisar código.
         </p>
         <div className="cta-row">
           <a href="#projetos" className="btn btn-primary">Ver Projetos <span>&#8599;</span></a>
           <a href="#contato" className="btn btn-secondary">Entrar em Contato</a>
         </div>
         <div className="stats">
-          <div className="stat">
-            <div className="num">1</div>
-            <div className="label">Projeto no ar</div>
-          </div>
-          <div className="stat">
-            <div className="num">SENAC</div>
-            <div className="label">Técnico ADS</div>
-          </div>
-          <div className="stat">
-            <div className="num">Eng.</div>
-            <div className="label">de Software</div>
-          </div>
+          {heroStats.map((s) => (
+            <div className="stat" key={s.label}>
+              <div className="num">{s.num}</div>
+              <div className="label">{s.label}</div>
+            </div>
+          ))}
         </div>
       </div>
 

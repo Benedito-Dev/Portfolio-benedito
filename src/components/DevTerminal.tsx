@@ -1,4 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
+import { profile } from '../data/profile'
+import { experiences } from '../data/experience'
+import { stackColumns } from '../data/stack'
+import { cases } from '../data/projects'
 
 /**
  * Easter egg: terminal falso escondido no site.
@@ -13,24 +17,25 @@ const WELCOME: Line[] = [
 
 const COMMANDS: Record<string, string[]> = {
   whoami: [
-    'Benedito Bittencourt — Desenvolvedor Full Stack',
+    `${profile.name} — ${profile.role}`,
     'Técnico em ADS (SENAC), graduando em Engenharia de Software.',
     'Curioso o suficiente pra abrir um terminal escondido num portfólio.',
   ],
-  stack: [
-    'TypeScript · JavaScript · React · Node.js · React Native',
-    'PostgreSQL · MongoDB · Firebase · Docker · Git',
-  ],
-  projetos: [
-    'Prumo — gestão para depósitos de materiais de construção (React + Node.js + PostgreSQL)',
-    'Vendas, fiado, indicadores e o assistente de IA Zé.',
-    'projeto: https://prumo-omega.vercel.app/',
-    'github: https://github.com/Benedito-Dev/Prumo',
-  ],
+  experiencia: experiences.flatMap((e) => [
+    `${e.company} · ${e.role} · ${e.period}`,
+    `${e.product.name}: ${e.product.description}`,
+    `site: ${e.product.url}`,
+  ]),
+  stack: stackColumns.map((col) => `${col.title}: ${col.items.join(' · ')}`),
+  projetos: cases.flatMap((c) => [
+    `${c.title.split(' — ')[0]} — ${c.summary}`,
+    ...(c.demo ? [`projeto: ${c.demo}`] : []),
+    ...(c.github ? [`github: ${c.github}`] : []),
+  ]),
   contato: [
-    'email: beneditobittencourtt@gmail.com',
-    'github: https://github.com/Benedito-Dev',
-    'linkedin: https://www.linkedin.com/in/benedito-bittencourt-13ab1b233/',
+    `email: ${profile.email}`,
+    `github: ${profile.github}`,
+    `linkedin: ${profile.linkedin}`,
   ],
 }
 
@@ -38,6 +43,7 @@ const HELP_LINES = [
   'Comandos disponíveis:',
   '  help       — mostra esta lista',
   '  whoami     — quem sou eu',
+  '  experiencia — onde trabalho',
   '  stack      — tecnologias que uso',
   '  projetos   — projetos em destaque',
   '  contato    — como falar comigo',
