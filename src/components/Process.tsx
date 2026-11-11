@@ -37,6 +37,9 @@ export function Process() {
     if (!section || !content || !list) return
     const rows = Array.from(list.querySelectorAll<HTMLLIElement>('.process-step'))
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+    /* Até 1100px os passos viram um carrossel horizontal: o passo ativo é o
+       cartão visível no carrossel, não a posição da rolagem vertical. */
+    const carousel = window.matchMedia('(max-width: 1100px)')
     let frame = 0
     let pinned = false
     let distance = 0
@@ -52,6 +55,12 @@ export function Process() {
     const update = () => {
       frame = 0
       let index = 0
+      if (carousel.matches) {
+        const step = rows[1] ? rows[1].offsetLeft - rows[0].offsetLeft : list.clientWidth
+        index = Math.max(0, Math.min(steps.length - 1, Math.round(list.scrollLeft / step)))
+        if (index !== current) { current = index; setActive(index) }
+        return
+      }
       if (pinned) {
         const start = section.getBoundingClientRect().top + parseFloat(getComputedStyle(section).paddingTop) - top
         index = Math.max(0, Math.min(steps.length - 1, Math.floor((-start / distance) * steps.length)))
@@ -67,7 +76,7 @@ export function Process() {
       highlight(index)
     }
     const measure = () => {
-      pinned = !reduced.matches && content.offsetHeight <= window.innerHeight - top - 24
+      pinned = !reduced.matches && !carousel.matches && content.offsetHeight <= window.innerHeight - top - 24
       distance = pinned ? Math.max(180, window.innerHeight * 0.35) * steps.length : 0
       section.classList.toggle('process-pinned', pinned)
       section.style.setProperty('--process-travel', `${distance}px`)
@@ -78,15 +87,19 @@ export function Process() {
     const observer = new ResizeObserver(measure)
     observer.observe(content)
     window.addEventListener('scroll', scroll, { passive: true })
+    list.addEventListener('scroll', scroll, { passive: true })
     window.addEventListener('resize', measure)
     reduced.addEventListener('change', measure)
+    carousel.addEventListener('change', measure)
     measure()
     return () => {
       cancelAnimationFrame(frame)
       observer.disconnect()
       window.removeEventListener('scroll', scroll)
+      list.removeEventListener('scroll', scroll)
       window.removeEventListener('resize', measure)
       reduced.removeEventListener('change', measure)
+      carousel.removeEventListener('change', measure)
       section.classList.remove('process-pinned')
       section.style.removeProperty('--process-travel')
       section.style.removeProperty('--process-content-height')
@@ -115,11 +128,16 @@ export function Process() {
             <div className="process-step-body">
               <h3>{step.title}</h3>
               <p>{step.text}</p>
-              <div className="process-mobile-visual"><ProcessVisual active={i} /></div>
+              <div className="process-mobile-visual"><ProcessVisual active={i} compact /></div>
             </div>
           </li>
         ))}
       </ol>
+      <div className="carousel-dots" aria-hidden="true">
+        {steps.map((step, i) => (
+          <span key={step.num} className={active === i ? 'is-active' : ''}></span>
+        ))}
+      </div>
       <div className="process-desktop-visual"><ProcessVisual active={active} /></div>
       </div>
       </div>

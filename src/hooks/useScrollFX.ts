@@ -106,11 +106,18 @@ export function useScrollFX() {
     let rafId = 0
     let queued = false
 
+    /* No celular as seções ficam empilhadas e próximas: o deslocamento do
+       parallax empurrava blocos por cima da seção seguinte (textos
+       sobrepostos). Ali ele fica desligado; os glows de fundo continuam. */
+    const desktop = window.matchMedia('(min-width: 901px)')
+
     const render = () => {
       queued = false
       const y = window.pageYOffset
 
-      parallaxEls.forEach((item) => {
+      if (!desktop.matches) {
+        parallaxEls.forEach((item) => { item.el.style.transform = '' })
+      } else parallaxEls.forEach((item) => {
         // distância do centro do elemento até o centro da viewport
         const center = item.docTop + item.height / 2 - y - vh / 2
         const offset = center * item.speed

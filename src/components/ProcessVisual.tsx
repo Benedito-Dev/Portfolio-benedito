@@ -88,7 +88,18 @@ function Ship() {
 
 const scenes = [Plan, Implement, Review, Ship]
 
-export function ProcessVisual({ active }: { active: number }) {
+export function ProcessVisual({ active, compact = false }: { active: number; compact?: boolean }) {
+  /* compacto (carrossel do celular): só o artefato da etapa, sem repetir o pipeline */
+  if (compact) {
+    const Scene = scenes[active]
+    return (
+      <div className="ai-compact">
+        <p className="ai-compact-agent">Agente {agents[active]}</p>
+        <Scene />
+      </div>
+    )
+  }
+
   return (
     <figure className="process-visual ai-visual">
       <div className="process-visual-heading">

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { MeuBolsoVisual, PrumoVisual } from './CaseVisuals'
 import { GithubIcon } from './icons'
 import { cases, labProjects, type CaseData, type CaseVisualKey } from '../data/projects'
@@ -9,7 +9,11 @@ const visuals: Record<CaseVisualKey, ReactNode> = {
 }
 
 function CaseStudy({ data }: { data: CaseData }) {
-  const cls = ['case', 'reveal', data.reverse ? 'reverse' : ''].filter(Boolean).join(' ')
+  /* no celular o case mostra solução, tags e links; o resto abre sob demanda */
+  const [expanded, setExpanded] = useState(false)
+  const cls = ['case', 'reveal', data.reverse ? 'reverse' : '', expanded ? 'is-expanded' : '']
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <article className={cls}>
@@ -22,7 +26,7 @@ function CaseStudy({ data }: { data: CaseData }) {
         </div>
         <h3>{data.title}</h3>
 
-        <div className="case-block">
+        <div className="case-block case-extra">
           <div className="lbl">Problema</div>
           <p>{data.problema}</p>
         </div>
@@ -32,7 +36,7 @@ function CaseStudy({ data }: { data: CaseData }) {
           <p>{data.solucao}</p>
         </div>
 
-        <div className="case-block">
+        <div className="case-block case-extra">
           <div className="lbl">Funcionalidades</div>
           <ul>
             {data.funcionalidades.map((f) => (
@@ -41,10 +45,16 @@ function CaseStudy({ data }: { data: CaseData }) {
           </ul>
         </div>
 
-        <div className="case-block">
+        <div className="case-block case-extra">
           <div className="lbl">Impacto</div>
           <p>{data.impacto}</p>
         </div>
+
+        {!expanded && (
+          <button type="button" className="read-more" onClick={() => setExpanded(true)}>
+            Problema, funcionalidades e impacto
+          </button>
+        )}
 
         <div className="case-tags">
           {data.tags.map((t) => (
